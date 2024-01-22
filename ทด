@@ -1,0 +1,8 @@
+<!-- 👉 Profile -->
+<VListItem link>
+  <template #prepend>
+    <VIcon class="me-2" icon="ri-user-line" size="22" />
+  </template>
+
+  <VListItemTitle>Profile</VListItemTitle>
+</VListItem>
