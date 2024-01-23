@@ -22,18 +22,11 @@ export const read = async () => {
 export const create = async (dataP: Pick<pendingModel, 
   'STU_ID' | 'F_NAME'| 'L_NAME' | 'GRADE' | 'ROOM' | 'NUMBER' | 'EMAIL'
   >) => {
-  console.log('Ctrl  m ss');
   const result = (await sql({
-    query: `
-      INSERT INTO pending (
-        STU_ID, F_NAME, L_NAME, GRADE, ROOM, NUMBER, EMAIL
-      ) VALUES (
-        ?,?,?,?,?,?,?
-      ) RETURNING *
-    `,
-    values: ['2','g','g','g','g','g','g']
+    query: 'INSERT INTO pending (STU_ID, F_NAME, L_NAME, GRADE, ROOM, NUMBER, EMAIL) VALUES (?,?,?,?,?,?,?)',
+    values: [dataP.STU_ID,dataP.F_NAME,dataP.L_NAME,dataP.GRADE,dataP.ROOM,dataP.NUMBER,dataP.EMAIL]
   })) as any;
-  console.log(result);
+
   return result.length === 1 ? (result[0] as pendingModel) : null;
 };
 

@@ -11,6 +11,7 @@ import avatar8 from '@images/avatars/avatar-8.png'
 const headers = [
 { title: 'User', key: 'username' },
 { title: 'E-mail', key: 'email' },
+{ title: 'Password', key: 'password' },
 { title: 'Action', key: 'action' },
 ]
 

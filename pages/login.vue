@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import { useTheme } from 'vuetify'
 
 import logo from '@images/logo.svg?raw'
@@ -8,11 +7,38 @@ import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 
-const form = ref({
+const login_form = ref({
   email: '',
   password: '',
   remember: false,
 })
+
+const reg_form = reactive({
+  STU_ID: '',
+  F_NAME: '',
+  L_NAME: '',
+  GRADE: '',
+  ROOM: '',
+  NUMBER: '',
+  EMAIL: ''
+});
+
+const router = useRouter();
+
+const onSubmit_Reg = async () => {
+  try {
+    await $fetch('/api/pending_dash', {
+      method: 'POST',
+      body: reg_form
+    });
+    alert('Request Successful');
+
+    router.push('/pending_dash');
+  } catch {
+    alert('Request Error');
+    console.log();
+  }
+};
 
 const vuetifyTheme = useTheme()
 
@@ -33,8 +59,10 @@ definePageMeta({ layout: 'blank' })
   <div class="auth-wrapper d-flex align-center justify-center pa-4">
     <VCard
       class="auth-card pa-4 pt-7"
-      max-width="448"
+      max-width="848"
     >
+    <VRow>
+      <VCol>
       <VCardItem class="justify-center">
         <template #prepend>
           <div class="d-flex">
@@ -43,16 +71,21 @@ definePageMeta({ layout: 'blank' })
         </template>
 
         <VCardTitle class="font-weight-semibold text-2xl text-uppercase">
-          Materio
+          Greet_Card
         </VCardTitle>
       </VCardItem>
+      </VCol>
+    </VRow>
 
+
+      <VRow>
+      <VCol>
       <VCardText class="pt-2">
         <h5 class="text-h5 font-weight-semibold mb-1">
-          Welcome to Materio! 👋🏻
+          Welcome to Greet_Card! 👋🏻
         </h5>
         <p class="mb-0">
-          Please sign-in to your account and start the adventure
+          Please sign-in to your account
         </p>
       </VCardText>
 
@@ -62,8 +95,8 @@ definePageMeta({ layout: 'blank' })
             <!-- email -->
             <VCol cols="12">
               <VTextField
-                v-model="form.email"
-                label="Email"
+                v-model="login_form.email"
+                label="Email : "
                 type="email"
               />
             </VCol>
@@ -71,8 +104,8 @@ definePageMeta({ layout: 'blank' })
             <!-- password -->
             <VCol cols="12">
               <VTextField
-                v-model="form.password"
-                label="Password"
+                v-model="login_form.password"
+                label="Password : "
                 placeholder="············"
                 :type="isPasswordVisible ? 'text' : 'password'"
                 :append-inner-icon="isPasswordVisible ? 'ri-eye-off-line' : 'ri-eye-line'"
@@ -82,7 +115,7 @@ definePageMeta({ layout: 'blank' })
               <!-- remember me checkbox -->
               <div class="d-flex align-center justify-space-between flex-wrap mt-1 mb-4">
                 <VCheckbox
-                  v-model="form.remember"
+                  v-model="login_form.remember"
                   label="Remember me"
                 />
 
@@ -122,22 +155,112 @@ definePageMeta({ layout: 'blank' })
               cols="12"
               class="d-flex align-center"
             >
-              <VDivider />
-              <span class="mx-4">or</span>
-              <VDivider />
-            </VCol>
-
-            <!-- auth providers -->
-            <VCol
-              cols="12"
-              class="text-center"
-            >
-              <AuthProvider />
             </VCol>
           </VRow>
         </VForm>
       </VCardText>
+    </VCol>
+  <VCol>
+
+    <VCardText>
+    
+      <VForm @submit.prevenr="() => {}">
+        <VRow>
+        <p class="mb-0">
+          Please in-form to your card</p>
+        </VRow>
+
+        <VRow>
+            <!-- F_name -->
+            <VCol cols="6">
+              <VTextField
+                v-model="reg_form.F_NAME"
+                label="First Name : "
+                type="text"
+              />
+            </VCol>
+            <!-- L_name -->
+            <VCol cols="6">
+              <VTextField
+                v-model="reg_form.L_NAME"
+                label="Last Name : "
+                type="text"
+              />
+            </VCol>
+          </VRow>
+
+          <VRow>
+            <!-- email -->
+            <VCol cols="12">
+              <VTextField
+                v-model="reg_form.EMAIL"
+                label="Email : "
+                type="email"
+              />
+            </VCol>
+          </VRow>
+
+          <VRow>
+            <!-- STU ID -->
+            <VCol cols="12">
+              <VTextField
+                v-model="reg_form.STU_ID"
+                label="Student ID : "
+                type="number"
+              />
+            </VCol>
+          </VRow>
+
+          <VRow>
+            <!-- Grade-->
+            <VCol cols="3.5">
+              <v-select
+                label="Grade"
+                :items="['A', 'B', 'C', 'D', 'E']"
+                v-model="reg_form.GRADE"
+                ></v-select>
+            </VCol>
+
+            <!-- ROOM -->
+            <VCol cols="3.5">
+              <v-select
+                label="Room"
+                :items="['1', '2', '5', '6', 'G','W']"
+                v-model="reg_form.ROOM"
+                ></v-select>
+            </VCol>
+
+            <!-- NUMBER -->
+            <VCol cols="5">
+              <VTextField
+                v-model="reg_form.NUMBER"
+                label="No. "
+                type="number"
+              />
+            </VCol>
+
+          </VRow>
+          <VRow><p class="mb-0">  </p></VRow>
+        <VRow>
+          <!-- login button -->
+          <VBtn
+                block
+                @click="onSubmit_Reg"
+              >
+                Request Card
+              </VBtn>
+            </VRow>
+            <VRow><p class="mb-0"> </p></VRow>
+            <VRow><p class="mb-0"> </p></VRow>
+            <VRow><p class="mb-0"> </p></VRow>
+
+      </VForm>
+    </VCardText>
+
+  </VCol>
+      </VRow>
     </VCard>
+    
 
 
     <VImg
@@ -163,3 +286,4 @@ definePageMeta({ layout: 'blank' })
 <style lang="scss">
 @use "@core/scss/pages/page-auth.scss";
 </style>
+

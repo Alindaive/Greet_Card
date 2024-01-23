@@ -9,10 +9,10 @@ import avatar7 from '@images/avatars/avatar-7.png'
 import avatar8 from '@images/avatars/avatar-8.png'
 
 const headers = [
+{ title: 'No.', key: 'number' },
 { title: 'User', key: 'username' },
 { title: 'E-mail', key: 'email' },
 { title: 'Student ID', key: 'stu_id' },
-{ title: 'Class / No.', key: 'index' },
 { title: 'Action', key: 'action' },
 ]
 
@@ -175,9 +175,9 @@ const resolveUserstatusVariant = (status: string) => {
       class="text-no-wrap"
     >
 
-      <!-- index -->
+      <!-- number -->
       <template #item.index="{ item }">
-        {{ item.grade }}{{ item.room }} / {{ item.number }}
+       {{ item.number }}
       </template>
 
       <!-- User -->
@@ -211,7 +211,7 @@ const resolveUserstatusVariant = (status: string) => {
 
       <!-- Time -->
       <template #item.action="{ item }">
-          <v-btn> 
+        <v-btn> 
             <VIcon icon="ri-user-add-line" size="22"/>
         </v-btn>
           <h> &nbsp;</h>

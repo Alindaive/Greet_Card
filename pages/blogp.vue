@@ -123,11 +123,12 @@ const onSubmit = async () => {
       method: 'POST',
       body: form
     });
-    alert('ss');
+    alert('Successful');
 
     router.push('/blogp');
   } catch {
     alert('Post blog error');
+    console.log();
   }
 };
 </script>
