@@ -7,6 +7,9 @@ import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 
+import console from 'console'
+import type { adminModel } from '~~/server/model/blogad'
+
 const login_form = ref({
   email: '',
   password: '',
@@ -25,17 +28,49 @@ const reg_form = reactive({
 
 const router = useRouter();
 
+const data = ref<adminModel[]>([]);
+
+const get_passwordof = async (EMAIL: string) => {
+  try {
+    const result = await $fetch('/api/admin/' + EMAIL) as any;
+    data.value = result.data as adminModel[];
+    //alert(JSON.stringify(data.value));
+
+    return JSON.stringify(data.value);
+  } catch {
+    alert('Fetch error');
+  }
+  console.log(data);
+};
+
+const handleonlogin = async (EMAIL: string,PASSWORD: string) => {
+  try {
+    const user_data_db = await get_passwordof(EMAIL);
+    const user_data_re = '{"EMAIL":"'+EMAIL+'","'+'PASSWORD":"'+ PASSWORD +'"}';
+    if(user_data_db==user_data_re){
+      alert('Login Sucess');
+      window.location.replace('/');
+    }
+    else{
+      alert('Wrong e-mail or password');
+    }
+    //alert(user_data_re+'=='+user_data_db);
+  } catch {
+    alert('Fetch error');
+  }
+};
+
 const onSubmit_Reg = async () => {
   try {
     await $fetch('/api/pending_dash', {
       method: 'POST',
       body: reg_form
     });
-    alert('Request Successful');
+    alert('Request Card Successful');
 
-    router.push('/pending_dash');
+    router.push('/login');
   } catch {
-    alert('Request Error');
+    alert('Request Card Error');
     console.log();
   }
 };
@@ -130,8 +165,7 @@ definePageMeta({ layout: 'blank' })
               <!-- login button -->
               <VBtn
                 block
-                type="submit"
-                to="/"
+                @click="() => handleonlogin(login_form.email,login_form.password)"
               >
                 Login
               </VBtn>
@@ -160,6 +194,7 @@ definePageMeta({ layout: 'blank' })
         </VForm>
       </VCardText>
     </VCol>
+    <v-divider class="border-opacity-50" color="info" vertical></v-divider>
   <VCol>
 
     <VCardText>
@@ -286,4 +321,3 @@ definePageMeta({ layout: 'blank' })
 <style lang="scss">
 @use "@core/scss/pages/page-auth.scss";
 </style>
-

@@ -7,12 +7,13 @@ import avatar5 from '@images/avatars/avatar-5.png'
 import avatar6 from '@images/avatars/avatar-6.png'
 import avatar7 from '@images/avatars/avatar-7.png'
 import avatar8 from '@images/avatars/avatar-8.png'
+import type { pendingModel } from '~~/server/model/blogp'
 
 const headers = [
-{ title: 'No.', key: 'number' },
 { title: 'User', key: 'username' },
 { title: 'E-mail', key: 'email' },
 { title: 'Student ID', key: 'stu_id' },
+{ title: 'Class / NO.', key: 'class' },
 { title: 'Action', key: 'action' },
 ]
 
@@ -164,60 +165,158 @@ const resolveUserstatusVariant = (status: string) => {
   return { color: 'undefined', icon: 'ri-user-line' }
 }
 
+const data = ref<pendingModel[]>([]);
+
+const fetchData = async () => {
+  try {
+    const result = await $fetch('/api/pending_dash');
+    data.value = result.data as pendingModel[];
+  } catch {
+    alert('Fetch error');
+  }
+};
+
+//ลงประวัติ
+const Mhistorytrack = async (EMAIL: string) => {
+  try {
+    await $fetch('/api/pending_dash/Phistory/' + EMAIL, {
+      method: 'POST'
+    });
+
+  } catch {
+    alert('History Error');
+  }
+};
+
+//ย้าย pending - > member
+const onMove = async (EMAIL: string,STU_ID : string) => {
+  const reg_status = await readstatus();
+
+  //ถ้าstatus_REG ว่าง ให้  ย้าย-> เพิ่มบัตรรอทำลายได้ -> ลงประวัติ ->ลบออกจาก member
+  if(reg_status == '00000'){
+  try {
+    await $fetch('/api/pending_dash/Move/' + EMAIL, {
+      method: 'POST'
+    });
+    alert('Add Member Sucess');
+    await registor_card(STU_ID);
+    await Mhistorytrack(EMAIL);
+    await onDelete(EMAIL,'Flase');
+  } catch {
+    alert('Add Member Error');
+  }
+}else{
+  alert('Has Another Reg');
+}
+};
+
+//ลงประวัติ
+const Dhistorytrack = async (EMAIL: string) => {
+  try {
+    await $fetch('/api/authen_dash/Dhistory/' + EMAIL, {
+      method: 'POST'
+    });
+
+  } catch {
+    alert('DHistory Error');
+  }
+};
+
+//ตรวจสอบ status
+const readstatus = async () => {
+  try {
+    const result = await $fetch('/api/status');
+    //alert(result);
+    //alert(JSON.parse(result)); 
+    //alert(JSON.parse(result)[0].DESTROY);
+    //alert(result);
+
+    return JSON.parse(result)[0].REG;
+  } catch {
+    alert('ST R Error');
+  }
+};
+
+//ระเบิด card
+const registor_card = async (STU_ID: string) => {
+  try {
+    //await readstatus();
+    await $fetch('/api/status/change_st_/reg/' + STU_ID, {
+      method: 'POST'
+    });
+
+  } catch {
+    alert('Registor Card Error');
+  }
+};
+
+//ลบออก
+const onDelete = async (EMAIL: string,WHTRACK: string) => {
+  if (WHTRACK==='True'){
+    await Dhistorytrack(EMAIL);
+    alert('Delete Member Sucess');
+  }
+
+  try {
+    await $fetch('/api/pending_dash/' + EMAIL, {
+      method: 'DELETE'
+    });
+
+    //alert('Delete Sucess');
+    await fetchData();
+  } catch {
+    alert('Delete error');
+  }
+};
+
+onMounted(fetchData);
+
 </script>
 
 <template>
   <VCard>
     <VDataTable
       :headers="headers"
-      :items="userData"
+      :items="data"
       item-value="id"
       class="text-no-wrap"
     >
 
-      <!-- number -->
-      <template #item.index="{ item }">
-       {{ item.number }}
-      </template>
-
       <!-- User -->
       <template #item.username="{ item }">
         <div class="d-flex align-center gap-x-4">
-          <VAvatar
-            size="34"
-            :variant="!item.avatar ? 'tonal' : undefined"
-            :color="!item.avatar ? resolveUserstatusVariant(item.status).color : undefined"
-          >
-            <VImg
-              v-if="item.avatar"
-              :src="item.avatar"
-            />
-          </VAvatar>
-
           <div class="d-flex flex-column">
             <h6 class="text-h6 font-weight-medium user-list-name">
-              {{ item.fullName }}
+              {{ item.F_NAME }} {{ item.L_NAME }}
             </h6>
 
-            <span class="text-sm text-medium-emphasis">@{{ item.email }}</span>
+            <span class="text-sm text-medium-emphasis">@{{ item.EMAIL }}</span>
           </div>
         </div>
       </template>
-      
-      <!-- Time -->
-      <template #item.time="{ item }">
-          {{ item.time }}
+
+      <!-- Email -->
+      <template #item.email="{ item }">
+          {{ item.EMAIL }}
       </template>
 
-      <!-- Time -->
+      <!-- Email -->
+      <template #item.stu_id="{ item }">
+          {{ item.STU_ID }}
+      </template>
+
+      <!-- Email -->
+      <template #item.class="{ item }">
+          {{ item.GRADE }}{{ item.ROOM }} / {{ item.NUMBER }}
+      </template>
+
+      <!-- Action -->
       <template #item.action="{ item }">
-        <v-btn> 
+        <v-btn @click="() => onMove(item.EMAIL,item.STU_ID)"> 
             <VIcon icon="ri-user-add-line" size="22"/>
         </v-btn>
           <h> &nbsp;</h>
-          <VBtn
-          color="error"
-          >
+          <VBtn @click="() => onDelete(item.EMAIL,'True')" color="error">
           <VIcon icon="ri-user-unfollow-line" size="22"/>
           </VBtn>
       </template>

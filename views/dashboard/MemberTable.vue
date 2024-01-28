@@ -8,11 +8,14 @@ import avatar6 from '@images/avatars/avatar-6.png'
 import avatar7 from '@images/avatars/avatar-7.png'
 import avatar8 from '@images/avatars/avatar-8.png'
 
+import type { memberModel } from '~~/server/model/blogm'
+
 const headers = [
 { title: 'No.', key: 'number' },
 { title: 'User', key: 'username' },
 { title: 'E-mail', key: 'email' },
 { title: 'Student ID', key: 'stu_id' },
+{ title: 'Log-in Check', key: 'login' },
 { title: 'Action', key: 'action' },
 ]
 
@@ -164,69 +167,179 @@ const resolveUserstatusVariant = (status: string) => {
   return { color: 'undefined', icon: 'ri-user-line' }
 }
 
-const grade_op =['Foo', 'Bar', 'Fizz', 'Buzz']
+const data = ref<memberModel[]>([]);
 
+const fetchData = async () => {
+  try {
+    const result = await $fetch('/api/member_dash');
+    data.value = result.data as memberModel[];
+  } catch {
+    alert('Fetch error');
+  }
+};
+
+//บันทึกประวัติลง history
+const Dhistorytrack = async (EMAIL: string) => {
+  try {
+    await $fetch('/api/authen_dash/Dhistory/' + EMAIL, {
+      method: 'POST'
+    });
+
+  } catch {
+    alert('DHistory Error');
+  }
+};
+
+//ตรวจสอบ status
+const readstatus = async () => {
+  try {
+    const result = await $fetch('/api/status');
+    //alert(result);
+    //alert(JSON.parse(result)); 
+    //alert(JSON.parse(result)[0].DESTROY);
+    //alert(result);
+
+    return JSON.parse(result)[0].DESTROY;
+  } catch {
+    alert('ST D Error');
+  }
+};
+
+//ระเบิด card
+const destroy_card = async (STU_ID: string) => {
+  try {
+    //await readstatus();
+    await $fetch('/api/status/change_st_/des/' + STU_ID, {
+      method: 'POST'
+    });
+
+  } catch {
+    alert('Destroy Card Error');
+  }
+};
+
+//WHTRACK คือเก็บลงหน้าประวัติ historyมั้ย
+//มันจะมีลบสองแบบ ลบด้วยแอดมินกดลบ(เก็บ) กับ ลบเพราะโดนย้าย(ไม่เก็บ)
+const onDelete = async (EMAIL: string,WHTRACK: string,STU_ID: string) => {
+  const status_DES = await readstatus();
+
+  //ถ้าstatus_DES ว่าง ให้ เก็บลงหน้าประวัติ -> เพิ่มบัตรรอทำลายได้ -> ลบออกจาก member
+  if(status_DES == '00000'){
+
+  if (WHTRACK==='True'){
+    await Dhistorytrack(EMAIL);
+    alert('Delete Member Sucess');
+  }
+
+  try {
+    //ระเบิด card
+    await destroy_card(STU_ID);
+    //ลบ member ใน db
+    await $fetch('/api/member_dash/' + EMAIL, {
+      method: 'DELETE'
+    });
+    
+    //เรียกดูข้อมูลใหม่
+    await fetchData();
+  } catch {
+    alert('Delete Member Error');
+  }
+}
+  //ถ้าstatus_DES ไม่ว่าง
+else{
+  alert('Have Other Delete Status');
+}
+};
+
+onMounted(fetchData);
+
+
+const grade_mem =['A', 'B', 'C', 'D','E']
+const room_mem =['1', '2', '5', '6','G','W']
 </script>
 
 <template>
   <VCard>
-    <br>
+    <div>
+      <VRow><p> </p></VRow>
+    <VRow>
+      <VCol cols="3">
     <v-select
-      :items="grade_op"
+      :items="grade_mem"
       density="compact"
       label="Grade"
     ></v-select>
-    <br>
+    </VCol>
+
+    <VCol cols="3">
+    <v-select
+      :items="room_mem"
+      density="compact"
+      label="Room"
+    ></v-select>
+    </VCol>
+
+    <VCol cols="3">
+      <VTextField
+                label="Max Hour "
+                type="number"
+              />
+    </VCol>
+
+    <VCol cols="2">
+      <VBtn>Cal</VBtn>
+    </VCol>
+  </VRow>
+  <VRow><p> </p></VRow>
+</div>
     <VDataTable
       :headers="headers"
-      :items="userData"
+      :items="data"
       item-value="id"
       class="text-no-wrap"
     >
 
       <!-- number -->
-      <template #item.index="{ item }">
-       {{ item.number }}
+      <template #item.number="{ item }">
+       {{ item.NUMBER }}
       </template>
 
       <!-- User -->
       <template #item.username="{ item }">
         <div class="d-flex align-center gap-x-4">
-          <VAvatar
-            size="34"
-            :variant="!item.avatar ? 'tonal' : undefined"
-            :color="!item.avatar ? resolveUserstatusVariant(item.status).color : undefined"
-          >
-            <VImg
-              v-if="item.avatar"
-              :src="item.avatar"
-            />
-          </VAvatar>
 
           <div class="d-flex flex-column">
             <h6 class="text-h6 font-weight-medium user-list-name">
-              {{ item.fullName }}
+              {{ item.F_NAME }} {{ item.L_NAME }} 
             </h6>
 
-            <span class="text-sm text-medium-emphasis">@{{ item.email }}</span>
+            <span class="text-sm text-medium-emphasis">@{{ item.EMAIL }}</span>
           </div>
         </div>
       </template>
-      
-      <!-- Time -->
-      <template #item.time="{ item }">
-          {{ item.time }}
+
+      <!-- Email -->
+      <template #item.email="{ item }">
+       {{ item.EMAIL }}
       </template>
 
-      <!-- Time -->
+      <!-- number -->
+      <template #item.stu_id="{ item }">
+       {{ item.STU_ID }}
+      </template>
+
+      <!-- login -->
+      <template #item.login="{ item }">
+       {{ item.LOGINCOUNT }} / 
+      </template>
+
+      <!-- Action -->
       <template #item.action="{ item }">
           <v-btn color="warning"> 
             <VIcon icon="ri-edit-2-line" size="22"/>
         </v-btn>
           <h> &nbsp;</h>
-          <VBtn
-          color="error"
-          >
+          <VBtn color="error" @click="() => onDelete(item.EMAIL,'True',item.STU_ID)">
           <VIcon icon="ri-delete-bin-2-line" size="22"/>
           </VBtn>
       </template>

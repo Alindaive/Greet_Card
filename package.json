@@ -25,6 +25,7 @@
     "h3": "^1.10.0",
     "mysql2": "^3.7.1",
     "nodemon": "^3.0.3",
+    "nuxt-session": "^1.0.3",
     "pinia": "^2.1.7",
     "prismjs": "^1.29.0",
     "roboto-fontface": "^0.10.0",

@@ -11,10 +11,8 @@ export default {
   created() {
     console.log(this.$route.query.STU_ID); // john
     const STU_ID = this.$route.query.STU_ID
-    //console.log(result);
-    $fetch('/api/login/' + STU_ID, {
-      method: 'POST'
-    });
+    const result = $fetch('/api/status');
+    console.log(JSON.stringify(result));
   },
 };
 </script>

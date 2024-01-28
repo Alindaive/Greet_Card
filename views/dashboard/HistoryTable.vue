@@ -8,13 +8,25 @@ import avatar6 from '@images/avatars/avatar-6.png'
 import avatar7 from '@images/avatars/avatar-7.png'
 import avatar8 from '@images/avatars/avatar-8.png'
 
+import type { historyModel } from '~~/server/model/blogh'
+
 const headers = [
   { title: 'Student ID', key: 'stu_id' },
-  { title: 'User', key: 'username' },
-  { title: 'Class / No.', key: 'index' },
+  { title: 'Email', key: 'email' },
   { title: 'Status', key: 'status' },
   { title: 'Time', key: 'time' },
 ]
+
+const data = ref<historyModel[]>([]);
+
+const fetchData = async () => {
+  try {
+    const result = await $fetch('/api/history_dash');
+    data.value = result.data as historyModel[];
+  } catch {
+    alert('Fetch error');
+  }
+};
 
 const userData = [
   {
@@ -150,7 +162,7 @@ const userData = [
 const resolveUserstatusVariant = (status: string) => {
   const statusLowerCase = status.toLowerCase()
 
-  if (statusLowerCase === 'log-in')
+  if (statusLowerCase === 'login')
     return { color: 'success', icon: 'ri-user-received-line' }
   if (statusLowerCase === 'delete')
     return { color: 'error', icon:' ri-user-unfollow-line' }
@@ -164,65 +176,48 @@ const resolveUserstatusVariant = (status: string) => {
   return { color: 'undefined', icon: 'ri-user-line' }
 }
 
+onMounted(fetchData);
 </script>
 
 <template>
   <VCard>
     <VDataTable
       :headers="headers"
-      :items="userData"
-      item-value="id"
+      :items="data"
+      item-value=""
       class="text-no-wrap"
     >
-      <!-- User -->
-      <template #item.username="{ item }">
-        <div class="d-flex align-center gap-x-4">
-          <VAvatar
-            size="34"
-            :variant="!item.avatar ? 'tonal' : undefined"
-            :color="!item.avatar ? resolveUserstatusVariant(item.status).color : undefined"
-          >
-            <VImg
-              v-if="item.avatar"
-              :src="item.avatar"
-            />
-          </VAvatar>
 
-          <div class="d-flex flex-column">
-            <h6 class="text-h6 font-weight-medium user-list-name">
-              {{ item.fullName }}
-            </h6>
+    <!-- Stu_id -->
+    <template #item.stu_id="{ item }">
+      <div v-if= "item.STU_ID === null"> ---- </div> 
+      <div v-else> {{ item.STU_ID }} </div> 
+    </template>
 
-            <span class="text-sm text-medium-emphasis">@{{ item.email }}</span>
-          </div>
-        </div>
+    <!-- Email -->
+    <template #item.email="{ item }">
+          {{ item.EMAIL }}
       </template>
 
-      <!-- index -->
-      <template #item.index="{ item }">
-        {{ item.grade }}{{ item.room }} / {{ item.number }}
-      </template>
 
       <!-- status -->
       <template #item.status="{ item }">
         <div class="d-flex gap-4">
           <VIcon
-            :icon="resolveUserstatusVariant(item.status).icon"
-            :color="resolveUserstatusVariant(item.status).color"
+            :icon="resolveUserstatusVariant(item.STATUS).icon"
+            :color="resolveUserstatusVariant(item.STATUS).color"
             size="22"
           />
           <div class="text-capitalize text-high-emphasis">
-            {{ item.status }}
+            {{ item.STATUS }}
           </div>
         </div>
       </template>    
       <!-- Time -->
       <template #item.time="{ item }">
-          {{ item.time }}
+          {{ item.TIMEOFH }}
       </template>
       
-
-      <template #bottom />
     </VDataTable>
   </VCard>
 </template>

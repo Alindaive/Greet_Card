@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useTheme } from 'vuetify'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 
 import logo from '@images/logo.svg?raw'
 import authV1MaskDark from '@images/pages/auth-v1-mask-dark.png'
@@ -8,12 +7,12 @@ import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 
-const form = ref({
-  username: '',
-  email: '',
-  password: '',
-  privacyPolicies: false,
-})
+const admin_form = reactive({
+  F_NAME: '',
+  L_NAME: '',
+  EMAIL: '',
+  PASSWORD:''
+});
 
 const vuetifyTheme = useTheme()
 
@@ -24,6 +23,22 @@ const authThemeMask = computed(() => {
 })
 
 const isPasswordVisible = ref(false)
+
+const router = useRouter();
+
+const onSubmit_Admin = async () => {
+  try {
+    await $fetch('/api/register', {
+      method: 'POST',
+      body: admin_form
+    });
+    alert('Request Authen Successful');
+
+    router.push('/register');
+  } catch {
+    alert('Request Error');
+  }
+};
 
 definePageMeta({ layout: 'blank' })
 </script>
@@ -44,34 +59,43 @@ definePageMeta({ layout: 'blank' })
         </template>
 
         <VCardTitle class="font-weight-semibold text-2xl text-uppercase">
-          Materio
+          Greet_Card
         </VCardTitle>
       </VCardItem>
 
       <VCardText class="pt-2">
         <h5 class="text-h5 font-weight-semibold mb-1">
-          Adventure starts here 🚀
+          Admin task starts here 🚀
         </h5>
         <p class="mb-0">
-          Make your app management easy and fun!
+          Request admin account here!
         </p>
       </VCardText>
 
       <VCardText>
         <VForm @submit.prevent="() => {}">
           <VRow>
-            <!-- Username -->
-            <VCol cols="12">
+            <!-- F_name -->
+            <VCol cols="6">
               <VTextField
-                v-model="form.username"
-                label="Username"
-                placeholder="Johndoe"
+                v-model="admin_form.F_NAME"
+                label="First name"
+                placeholder="John"
               />
             </VCol>
+            <!-- L_name -->
+            <VCol cols="6">
+              <VTextField
+                v-model="admin_form.L_NAME"
+                label="Last name"
+                placeholder="doe"
+              />
+            </VCol>
+
             <!-- email -->
             <VCol cols="12">
               <VTextField
-                v-model="form.email"
+                v-model="admin_form.EMAIL"
                 label="Email"
                 placeholder="johndoe@email.com"
                 type="email"
@@ -81,7 +105,7 @@ definePageMeta({ layout: 'blank' })
             <!-- password -->
             <VCol cols="12">
               <VTextField
-                v-model="form.password"
+                v-model="admin_form.PASSWORD"
                 label="Password"
                 placeholder="············"
                 :type="isPasswordVisible ? 'text' : 'password'"
@@ -89,27 +113,21 @@ definePageMeta({ layout: 'blank' })
                 @click:append-inner="isPasswordVisible = !isPasswordVisible"
               />
               <div class="d-flex align-center mt-1 mb-4">
-                <VCheckbox
-                  id="privacy-policy"
-                  v-model="form.privacyPolicies"
-                  inline
-                />
                 <VLabel
                   for="privacy-policy"
                   style="opacity: 1;"
                 >
-                  <span class="me-1">I agree to</span>
+                  <span class="me-1"></span>
                   <a
                     href="javascript:void(0)"
                     class="text-primary"
-                  >privacy policy & terms</a>
+                  ></a>
                 </VLabel>
               </div>
 
               <VBtn
                 block
-                type="submit"
-                to="/"
+                @click="onSubmit_Admin"
               >
                 Sign up
               </VBtn>
@@ -129,22 +147,6 @@ definePageMeta({ layout: 'blank' })
               </NuxtLink>
             </VCol>
 
-            <VCol
-              cols="12"
-              class="d-flex align-center"
-            >
-              <VDivider />
-              <span class="mx-4">or</span>
-              <VDivider />
-            </VCol>
-
-            <!-- auth providers -->
-            <VCol
-              cols="12"
-              class="text-center"
-            >
-              <AuthProvider />
-            </VCol>
           </VRow>
         </VForm>
       </VCardText>

@@ -1,19 +1,21 @@
 import { sql } from '~~/server/db/index';
 
 export type pendingModel = {
-  STU_ID: number;
+  STU_ID: string;
   F_NAME: string;
   L_NAME: string;
   GRADE: string;
   ROOM: string;
   NUMBER: number;
   EMAIL: string;
-  TIME: string;
+  DATEOFREG: string;
+  TIMEOFREG: string;
 };
+
 
 export const read = async () => {
   const result = await sql({
-    query: 'SELECT STU_ID, F_NAME, L_NAME, GRADE, ROOM, NUMBER, EMAIL, TIME FROM pending'
+    query: 'SELECT STU_ID, F_NAME, L_NAME, GRADE, ROOM, NUMBER, EMAIL, DATEOFREG ,TIMEOFREG FROM pending'
   });
 
   return result as pendingModel[];
@@ -39,10 +41,28 @@ export const detail = async (STU_ID: string) => {
   return result.length === 1 ? (result[0] as pendingModel) : null;
 };
 
-export const remove = async (STU_ID: string) => {
+export const remove = async (EMAIL: string) => {
   await sql({
-    query: 'DELETE FROM pending WHERE STU_ID = ?',
-    values: [STU_ID]
+    query: 'DELETE FROM pending WHERE EMAIL = ?',
+    values: [EMAIL]
+  });
+
+  return true;
+};
+
+export const movepending = async (EMAIL: string) => {
+  await sql({
+    query: 'INSERT INTO member(STU_ID,F_NAME,L_NAME,GRADE,ROOM,NUMBER,EMAIL) SELECT STU_ID,F_NAME,L_NAME,GRADE,ROOM,NUMBER,EMAIL FROM pending WHERE EMAIL = ?',
+    values: [EMAIL]
+  });
+
+  return true;
+};
+
+export const Phispending = async (EMAIL: string) => {
+  await sql({
+    query: 'INSERT INTO history(EMAIL,STATUS)  VALUES (?,?)',
+    values: [EMAIL,'Registor']
   });
 
   return true;
