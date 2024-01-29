@@ -9,7 +9,7 @@ const pool = createPool({
   host: 'greet-card.cpmkke0quzqm.ap-southeast-2.rds.amazonaws.com',
   user: 'root',
   database: 'greet_card',
-  password: 'Root10320790'
+  password: 'Root1032079'
 });
 
 export const sql = async ({ query, values }: Options) => {
