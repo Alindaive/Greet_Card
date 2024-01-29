@@ -6,10 +6,10 @@ interface Options {
 }
 
 const pool = createPool({
-  host: 'localhost',
+  host: 'greet-card.cpmkke0quzqm.ap-southeast-2.rds.amazonaws.com',
   user: 'root',
   database: 'GREET_CARD',
-  password: 'Root'
+  password: 'Root1032079'
 });
 
 export const sql = async ({ query, values }: Options) => {
