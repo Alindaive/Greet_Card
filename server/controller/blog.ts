@@ -317,8 +317,9 @@ export const readstatusreg = async () => {
   try {
     console.log('Ctrl  rs ss');
     const result = await statusModel.readstatusreg();
-
-    return JSON.stringify(result[0]);
+    var str = JSON.stringify(result[0]);
+    var sliced = str.slice(8, -2); 
+    return sliced;
   } catch (err) {
     throw createError({
       statusCode: 500,
@@ -330,8 +331,9 @@ export const readstatusedit = async () => {
   try {
     console.log('Ctrl  rs ss');
     const result = await statusModel.readstatusedit();
-
-    return JSON.stringify(result[0]);
+    var str = JSON.stringify(result[0]);
+    var sliced = str.slice(9, -2); 
+    return sliced;
   } catch (err) {
     throw createError({
       statusCode: 500,
@@ -343,8 +345,9 @@ export const readstatusdes = async () => {
   try {
     console.log('Ctrl  rs ss');
     const result = await statusModel.readstatusdes();
-
-    return JSON.stringify(result[0]);
+    var str = JSON.stringify(result[0]);
+    var sliced = str.slice(12, -2); 
+    return sliced;
   } catch (err) {
     throw createError({
       statusCode: 500,
