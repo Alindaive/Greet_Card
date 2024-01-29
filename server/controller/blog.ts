@@ -313,6 +313,46 @@ export const readstatus = async () => {
   }
 };
 
+export const readstatusreg = async () => {
+  try {
+    console.log('Ctrl  rs ss');
+    const result = await statusModel.readstatusreg();
+
+    return JSON.stringify(result[0]);
+  } catch (err) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Something went wrong'
+    });
+  }
+};
+export const readstatusedit = async () => {
+  try {
+    console.log('Ctrl  rs ss');
+    const result = await statusModel.readstatusedit();
+
+    return JSON.stringify(result[0]);
+  } catch (err) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Something went wrong'
+    });
+  }
+};
+export const readstatusdes = async () => {
+  try {
+    console.log('Ctrl  rs ss');
+    const result = await statusModel.readstatusdes();
+
+    return JSON.stringify(result[0]);
+  } catch (err) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Something went wrong'
+    });
+  }
+};
+
 export const change_st_reg = async (evt: H3Event) => {
   try {
     console.log('Ctrl change st reg ss');

@@ -16,6 +16,30 @@ export const readstatus = async () => {
   return result as statusModel[];
 };
 
+export const readstatusreg = async () => {
+  const result = await sql({
+    query: 'SELECT REG FROM status'
+  });
+
+  return result as statusModel[];
+};
+
+export const readstatusedit = async () => {
+  const result = await sql({
+    query: 'SELECT EDIT FROM status'
+  });
+
+  return result as statusModel[];
+};
+
+export const readstatusdes = async () => {
+  const result = await sql({
+    query: 'SELECT DESTROY FROM status'
+  });
+
+  return result as statusModel[];
+};
+
 export const change_st_reg = async (STU_ID : string) => {
   await sql({
     query: 'UPDATE status SET REG = ? WHERE INDEX_NUM = 1',

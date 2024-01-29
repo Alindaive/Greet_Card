@@ -30,6 +30,9 @@ router.get('/admin/:EMAIL', defineEventHandler(blogCtrl.adminlogin)); //เร�
 router.post('/login/:STU_ID', defineEventHandler(blogCtrl.login)); //
 
 router.get('/status', defineEventHandler(blogCtrl.readstatus)); //
+router.get('/status/reg', defineEventHandler(blogCtrl.readstatusreg)); //
+router.get('/status/edit', defineEventHandler(blogCtrl.readstatusedit)); //
+router.get('/status/des', defineEventHandler(blogCtrl.readstatusdes)); //
 router.post('/status/change_st_/reg/:STU_ID', defineEventHandler(blogCtrl.change_st_reg)); //
 router.post('/status/change_st_/edit/:STU_ID', defineEventHandler(blogCtrl.change_st_edit)); //
 router.post('/status/change_st_/des/:STU_ID', defineEventHandler(blogCtrl.change_st_des));
