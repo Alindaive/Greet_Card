@@ -8,7 +8,7 @@ interface Options {
 const pool = createPool({
   host: 'greet-card.cpmkke0quzqm.ap-southeast-2.rds.amazonaws.com',
   user: 'root',
-  database: 'GREET_CARD',
+  database: 'greet_card',
   password: 'Root1032079'
 });
 
