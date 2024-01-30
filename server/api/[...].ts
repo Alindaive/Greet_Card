@@ -29,7 +29,7 @@ router.post('/pending_dash/Phistory/:EMAIL', defineEventHandler(blogCtrl.Phispen
 router.get('/admin/:EMAIL', defineEventHandler(blogCtrl.adminlogin)); //เรียกดูข้อมูล admin
 
 router.post('/login/:STU_ID', defineEventHandler(blogCtrl.login)); //
-router.post('/logincount/:STU_ID', defineEventHandler(blogCtrl.loginc)); //
+router.get('/logincount/:STU_ID', defineEventHandler(blogCtrl.loginc)); //
 
 router.get('/status', defineEventHandler(blogCtrl.readstatus)); //
 router.get('/status/reg', defineEventHandler(blogCtrl.readstatusreg)); //

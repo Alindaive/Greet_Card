@@ -319,7 +319,9 @@ export const loginc = async (evt: H3Event) => {
   try {
     console.log('Ctrl loginc ss');
     const result = await memberModel.loginc(evt.context.params?.STU_ID as string);
-    return  result ;
+    var str = JSON.stringify(result[0]);
+    var sliced = str.slice(15, -2); 
+    return sliced;
   } catch (err) {
     throw createError({
       statusCode: 500,
