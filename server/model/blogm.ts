@@ -45,7 +45,7 @@ export const login = async (STU_ID: string) => {
   try{
     //console.log('sql login ss');
     const result = (await sql({
-      query: 'UPDATE member SET LOGINCOUNT = LOGINCOUNT + 1 WHERE STU_ID = ?',
+      query: 'UPDATE member SET LOGINCOUNT = LOGINCOUNT + 1 , LOGINCHECK = "1" WHERE STU_ID = ?',
       values: [STU_ID]
     })) as any;
   
