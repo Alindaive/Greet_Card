@@ -54,3 +54,17 @@ export const login = async (STU_ID: string) => {
     console.log('sql f');
   }
   };
+
+  export const loginc = async (STU_ID: string) => {
+    try{
+      //console.log('sql login ss');
+      const result = (await sql({
+        query: 'SELECT LOGINCHECK WHERE STU_ID = ?',
+        values: [STU_ID]
+      })) as any;
+    
+      return result.length === 1 ? (result[0] as memberModel) : null;
+    }catch{
+      console.log('sql f');
+    }
+    };

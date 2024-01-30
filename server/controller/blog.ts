@@ -315,6 +315,19 @@ export const login = async (evt: H3Event) => {
   }
 };
 
+export const loginc = async (evt: H3Event) => {
+  try {
+    console.log('Ctrl loginc ss');
+    const result = await memberModel.loginc(evt.context.params?.STU_ID as string);
+    return  result ;
+  } catch (err) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Something went wrong'
+    });
+  }
+};
+
 export const readstatus = async () => {
   try {
     console.log('Ctrl  rs ss');
