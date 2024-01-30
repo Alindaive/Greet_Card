@@ -23,6 +23,15 @@ export const readmember = async () => {
   return result as memberModel[];
 };
 
+export const checkmember = async (STU_ID: string) => {
+  const result = await sql({
+    query: 'SELECT STU_ID FROM member WHERE STU_ID = ?',
+    values: [STU_ID]
+  });
+
+  return result as memberModel[];
+};
+
 export const removemember = async (EMAIL: string) => {
   await sql({
     query: 'DELETE FROM member WHERE EMAIL = ?',

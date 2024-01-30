@@ -15,6 +15,7 @@ router.post('/pending_dash/Move/:EMAIL', defineEventHandler(blogCtrl.Movepending
 
 router.get('/member_dash', defineEventHandler(blogCtrl.readmember)); //เรียกดูข้อมูล member
 router.delete('/member_dash/:EMAIL', defineEventHandler(blogCtrl.removemember)); //ลบข้อมูล member
+router.get('/member_dash/:STU_ID', defineEventHandler(blogCtrl.checkmember)); //เช็ค member
 
 router.post('/register', defineEventHandler(blogCtrl.createauthen)); //สร้างแทรกข้อมูล authen
 router.get('/authen_dash', defineEventHandler(blogCtrl.readauthen)); //เรียกดูข้อมูล authen

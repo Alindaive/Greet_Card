@@ -133,6 +133,22 @@ export const readmember = async () => {
   }
 };
 
+export const checkmember = async (evt: H3Event) => {
+  try {
+    console.log('Ctrl  check m ss');
+    const result = await memberModel.checkmember(evt.context.params?.STU_ID as string);
+    var str = JSON.stringify(result[0]);
+    var sliced = str.slice(11, -2); 
+    return sliced;
+  
+  } catch (err) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Something went wrong'
+    });
+  }
+};
+
 //ลบข้อมูล member
 export const removemember = async (evt: H3Event) => {
   try {
