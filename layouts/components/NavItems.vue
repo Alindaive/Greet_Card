@@ -45,6 +45,14 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
 
     <VerticalNavLink
       :item="{
+        title: 'Admin',
+        to: '/admin_dash',
+        icon: 'ri-user-star-line',
+      }"
+    />
+
+    <VerticalNavLink
+      :item="{
         title: 'About Us',
         to: '/about_us_dash',
         icon: 'ri-question-line',

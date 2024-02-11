@@ -26,7 +26,25 @@ const isPasswordVisible = ref(false)
 
 const router = useRouter();
 
+
 const onSubmit_Admin = async () => {
+  if (admin_form.F_NAME == ""){
+    alert ('Required First Name');
+  }
+  else if (admin_form.L_NAME == ""){
+    alert ('Required Last Name');
+  }
+  else if (admin_form.EMAIL == ""){
+    alert ('Required Email');
+  }
+  else if (!admin_form.EMAIL.includes("@")){
+    alert ('Required "@" in Email');
+  }
+  else if (admin_form.PASSWORD == ""){
+    alert ('Required Password');
+  }
+  else{
+
   try {
     await $fetch('/api/register', {
       method: 'POST',
@@ -34,11 +52,12 @@ const onSubmit_Admin = async () => {
     });
     alert('Request Authen Successful');
 
-    router.push('/register');
+    router.push('/login');
   } catch {
     alert('Request Error');
   }
 };
+}
 
 definePageMeta({ layout: 'blank' })
 </script>
@@ -73,7 +92,7 @@ definePageMeta({ layout: 'blank' })
       </VCardText>
 
       <VCardText>
-        <VForm @submit.prevent="() => {}">
+        <VForm>
           <VRow>
             <!-- F_name -->
             <VCol cols="6">
@@ -81,6 +100,8 @@ definePageMeta({ layout: 'blank' })
                 v-model="admin_form.F_NAME"
                 label="First name"
                 placeholder="John"
+                required
+                :rules="[() => admin_form.F_NAME.length > 0 || 'Required First name']"
               />
             </VCol>
             <!-- L_name -->
@@ -89,6 +110,8 @@ definePageMeta({ layout: 'blank' })
                 v-model="admin_form.L_NAME"
                 label="Last name"
                 placeholder="doe"
+                required
+                :rules="[() => admin_form.L_NAME.length > 0 || 'Required Last name']"
               />
             </VCol>
 
@@ -99,6 +122,8 @@ definePageMeta({ layout: 'blank' })
                 label="Email"
                 placeholder="johndoe@email.com"
                 type="email"
+                required
+                :rules="[() => admin_form.EMAIL.length > 0 || 'Required Email']"
               />
             </VCol>
 
@@ -108,6 +133,8 @@ definePageMeta({ layout: 'blank' })
                 v-model="admin_form.PASSWORD"
                 label="Password"
                 placeholder="············"
+                required
+                :rules="[() => admin_form.PASSWORD.length > 0 || 'Required Password']"
                 :type="isPasswordVisible ? 'text' : 'password'"
                 :append-inner-icon="isPasswordVisible ? 'ri-eye-off-line' : 'ri-eye-line'"
                 @click:append-inner="isPasswordVisible = !isPasswordVisible"

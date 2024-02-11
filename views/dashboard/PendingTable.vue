@@ -199,7 +199,7 @@ const onMove = async (EMAIL: string,STU_ID : string) => {
       method: 'POST'
     });
     alert('Add Member Sucess');
-    await registor_card(STU_ID);
+    await registor_card(STU_ID); //registor card
     await Mhistorytrack(EMAIL);
     await onDelete(EMAIL,'Flase');
   } catch {

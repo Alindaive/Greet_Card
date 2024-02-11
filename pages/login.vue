@@ -38,17 +38,26 @@ const get_passwordof = async (EMAIL: string) => {
 
     return JSON.stringify(data.value);
   } catch {
-    alert('Fetch error');
+    alert('Login Error');
   }
   console.log(data);
 };
 
+const state =  reactive({
+  username : '',
+  
+  error : ''
+})
+//ปุ่มlogin
 const handleonlogin = async (EMAIL: string,PASSWORD: string) => {
   try {
     const user_data_db = await get_passwordof(EMAIL);
     const user_data_re = '{"EMAIL":"'+EMAIL+'","'+'PASSWORD":"'+ PASSWORD +'"}';
+    //ถ้าข้อมูลในฐานข้อมูลกับข้อมูลในฟอร์มตรงกัน
     if(user_data_db==user_data_re){
       alert('Login Sucess');
+      //state.username = EMAIL;
+      localStorage.setItem('CURRENT_USER', EMAIL);
       window.location.replace('/');
     }
     else{
@@ -61,6 +70,33 @@ const handleonlogin = async (EMAIL: string,PASSWORD: string) => {
 };
 
 const onSubmit_Reg = async () => {
+
+  if (reg_form.F_NAME == ""){
+    alert ('Required First Name');
+  }
+  else if (reg_form.L_NAME == ""){
+    alert ('Required Last Name');
+  }
+  else if (reg_form.EMAIL == ""){
+    alert ('Required Email');
+  }
+  else if (!reg_form.EMAIL.includes("@")){
+    alert ('Required "@" in Email');
+  }
+  else if (reg_form.STU_ID == ""){
+    alert ('Required Student ID');
+  }
+  else if (reg_form.GRADE == ""){
+    alert ('Required Grade');
+  }
+  else if (reg_form.ROOM == ""){
+    alert ('Required Room');
+  }
+  else if (reg_form.NUMBER == ""){
+    alert ('Required Number');
+  }
+  else{
+
   try {
     await $fetch('/api/pending_dash', {
       method: 'POST',
@@ -68,13 +104,14 @@ const onSubmit_Reg = async () => {
     });
     alert('Request Card Successful');
 
-    router.push('/login');
+    window.location.replace("/login");
   } catch {
     alert('Request Card Error');
     console.log();
   }
 };
 
+}
 const vuetifyTheme = useTheme()
 
 const authThemeMask = computed(() => {
@@ -125,7 +162,7 @@ definePageMeta({ layout: 'blank' })
       </VCardText>
 
       <VCardText>
-        <VForm @submit.prevent="() => {}">
+        <VForm>
           <VRow>
             <!-- email -->
             <VCol cols="12">
@@ -133,7 +170,9 @@ definePageMeta({ layout: 'blank' })
                 v-model="login_form.email"
                 label="Email : "
                 type="email"
-              />
+                required
+                :rules="[() => login_form.email.length > 0 || 'Required Email']" 
+              /><!-- check lenght -->
             </VCol>
 
             <!-- password -->
@@ -142,6 +181,8 @@ definePageMeta({ layout: 'blank' })
                 v-model="login_form.password"
                 label="Password : "
                 placeholder="············"
+                required
+                :rules="[() => login_form.password.length > 0 || 'Required Password']"
                 :type="isPasswordVisible ? 'text' : 'password'"
                 :append-inner-icon="isPasswordVisible ? 'ri-eye-off-line' : 'ri-eye-line'"
                 @click:append-inner="isPasswordVisible = !isPasswordVisible"
@@ -154,12 +195,7 @@ definePageMeta({ layout: 'blank' })
                   label="Remember me"
                 />
 
-                <a
-                  class="ms-2 mb-1"
-                  href="javascript:void(0)"
-                >
-                  Forgot Password?
-                </a>
+                
               </div>
 
               <!-- login button -->
@@ -199,7 +235,7 @@ definePageMeta({ layout: 'blank' })
 
     <VCardText>
     
-      <VForm @submit.prevenr="() => {}">
+      <VForm>
         <VRow>
         <p class="mb-0">
           Please in-form to your card</p>
@@ -212,6 +248,8 @@ definePageMeta({ layout: 'blank' })
                 v-model="reg_form.F_NAME"
                 label="First Name : "
                 type="text"
+                required
+                :rules="[() => reg_form.F_NAME.length > 0 || 'Required First name']"
               />
             </VCol>
             <!-- L_name -->
@@ -220,6 +258,8 @@ definePageMeta({ layout: 'blank' })
                 v-model="reg_form.L_NAME"
                 label="Last Name : "
                 type="text"
+                required
+                :rules="[() => reg_form.L_NAME.length > 0 || 'Required Last name']"
               />
             </VCol>
           </VRow>
@@ -231,6 +271,8 @@ definePageMeta({ layout: 'blank' })
                 v-model="reg_form.EMAIL"
                 label="Email : "
                 type="email"
+                required
+                :rules="[() => reg_form.EMAIL.length > 0 || 'Required Email']"
               />
             </VCol>
           </VRow>
@@ -242,6 +284,8 @@ definePageMeta({ layout: 'blank' })
                 v-model="reg_form.STU_ID"
                 label="Student ID : "
                 type="number"
+                required
+                :rules="[() => reg_form.STU_ID.length > 0 || 'Required Student ID']"
               />
             </VCol>
           </VRow>
@@ -253,6 +297,8 @@ definePageMeta({ layout: 'blank' })
                 label="Grade"
                 :items="['A', 'B', 'C', 'D', 'E']"
                 v-model="reg_form.GRADE"
+                required
+                :rules="[() => reg_form.GRADE.length > 0 || 'Required Grade']"
                 ></v-select>
             </VCol>
 
@@ -262,6 +308,8 @@ definePageMeta({ layout: 'blank' })
                 label="Room"
                 :items="['1', '2', '5', '6', 'G','W']"
                 v-model="reg_form.ROOM"
+                required
+                :rules="[() => reg_form.ROOM.length > 0 || 'Required Room']"
                 ></v-select>
             </VCol>
 
@@ -271,6 +319,8 @@ definePageMeta({ layout: 'blank' })
                 v-model="reg_form.NUMBER"
                 label="No. "
                 type="number"
+                required
+                :rules="[() => reg_form.NUMBER.length > 0 || 'Required Number']"
               />
             </VCol>
 

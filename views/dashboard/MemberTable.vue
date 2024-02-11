@@ -10,6 +10,8 @@ import avatar8 from '@images/avatars/avatar-8.png'
 
 import type { memberModel } from '~~/server/model/blogm'
 
+const route = useRoute();
+
 const headers = [
 { title: 'No.', key: 'number' },
 { title: 'User', key: 'username' },
@@ -226,21 +228,22 @@ const onDelete = async (EMAIL: string,WHTRACK: string,STU_ID: string) => {
   //ถ้าstatus_DES ว่าง ให้ เก็บลงหน้าประวัติ -> เพิ่มบัตรรอทำลายได้ -> ลบออกจาก member
   if(status_DES == '00000'){
 
-  if (WHTRACK==='True'){
-    await Dhistorytrack(EMAIL);
-    alert('Delete Member Sucess');
-  }
+    if (WHTRACK=='True'){
+      await Dhistorytrack(EMAIL);
+      alert('Delete Member Sucess');
+    }
 
-  try {
-    //ระเบิด card
-    await destroy_card(STU_ID);
-    //ลบ member ใน db
-    await $fetch('/api/member_dash/' + EMAIL, {
-      method: 'DELETE'
-    });
-    
-    //เรียกดูข้อมูลใหม่
-    await fetchData();
+    try {
+      //ระเบิด card
+      await destroy_card(STU_ID);
+      //ลบ member ใน db
+
+      await $fetch('/api/member_dash/' + EMAIL, {
+        method: 'DELETE'
+      });
+      
+      //เรียกดูข้อมูลใหม่
+      await fetchData();
   } catch {
     alert('Delete Member Error');
   }
@@ -249,6 +252,10 @@ const onDelete = async (EMAIL: string,WHTRACK: string,STU_ID: string) => {
 else{
   alert('Have Other Delete Status');
 }
+};
+
+const onEdit = async (EMAIL: string) => {
+  window.location.replace("/" + EMAIL);
 };
 
 onMounted(fetchData);
@@ -295,7 +302,7 @@ const room_mem =['1', '2', '5', '6','G','W']
     <VDataTable
       :headers="headers"
       :items="data"
-      item-value="id"
+      item-value="email"
       class="text-no-wrap"
     >
 
@@ -335,7 +342,7 @@ const room_mem =['1', '2', '5', '6','G','W']
 
       <!-- Action -->
       <template #item.action="{ item }">
-          <v-btn color="warning"> 
+          <v-btn color="warning" @click="() => onEdit(item.EMAIL)"> 
             <VIcon icon="ri-edit-2-line" size="22"/>
         </v-btn>
           <h> &nbsp;</h>

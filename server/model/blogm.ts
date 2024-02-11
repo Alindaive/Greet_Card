@@ -23,6 +23,44 @@ export const readmember = async () => {
   return result as memberModel[];
 };
 
+export const preeditmember = async (EMAIL: string) => {
+  const result = (await sql({
+    query: 'SELECT * FROM member WHERE EMAIL = ?',
+    values: [EMAIL]
+  }))as any;
+
+  return result.length === 1 ? (result[0] as memberModel) : null;
+};
+
+export const posteditmember = async (EMAIL: string, data: Pick<memberModel, 'F_NAME' | 'L_NAME' | 'EMAIL' | 'STU_ID'| 'GRADE' | 'ROOM' | 'NUMBER'>) => {
+  await sql({
+    query: `
+      UPDATE member
+      SET
+        F_NAME = ?,
+        L_NAME = ?,
+        EMAIL = ?,
+        STU_ID = ?,
+        GRADE = ?,
+        ROOM = ?,
+        NUMBER = ?
+      WHERE EMAIL = ?
+    `,
+    values: [data.F_NAME, data.L_NAME, data.EMAIL, data.STU_ID, data.GRADE,data.ROOM,data.NUMBER, EMAIL]
+  });
+
+  return await preeditmember(EMAIL);
+};
+
+export const Ehismember = async (EMAIL: string) => {
+  await sql({
+    query: 'INSERT INTO history(EMAIL,STATUS)  VALUES (?,?)',
+    values: [EMAIL,'edit']
+  });
+
+  return true;
+};
+
 export const checkmember = async (STU_ID: string) => {
   const result = await sql({
     query: 'SELECT STU_ID FROM member WHERE STU_ID = ?',

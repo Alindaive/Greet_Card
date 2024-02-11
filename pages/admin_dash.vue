@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import PendingTable from '@/views/dashboard/PendingTable.vue';
+import AdminTable from '@/views/dashboard/AdminTable.vue';
 </script>
 
 <template>
   <VRow class="match-height">
     <VCol cols="12">
-      <PendingTable />
+      <AdminTable />
     </VCol>
   </VRow>
 </template>

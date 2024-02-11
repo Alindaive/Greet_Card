@@ -133,6 +133,50 @@ export const readmember = async () => {
   }
 };
 
+//เรียกดูข้อมูล member
+export const preeditmember = async (evt: H3Event) => {
+  try {
+    console.log('Ctrl  pedm ss');
+    const result = await memberModel.preeditmember(evt.context.params?.EMAIL as string);
+
+    return {
+      data: result
+    };
+  } catch (err) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Something went wrong'
+    });
+  }
+};
+
+
+//Edit member
+export const posteditmember = async (evt: H3Event) => {
+  try {
+    console.log('Ctrl  post ed m ss');
+    const body = await readBody(evt);
+    const result = await memberModel.posteditmember(evt.context.params?.EMAIL as string, {
+      F_NAME: body.F_NAME,
+      L_NAME: body.L_NAME,
+      EMAIL: body.EMAIL,
+      STU_ID: body.STU_ID,
+      GRADE: body.GRADE,
+      ROOM: body.ROOM,
+      NUMBER: body.NUMBER,
+    });
+
+    return {
+      data: result
+    };
+  } catch {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Something went wrong'
+    });
+  }
+};
+
 export const checkmember = async (evt: H3Event) => {
   try {
     console.log('Ctrl  check m ss');
@@ -284,15 +328,66 @@ export const Phispending = async (evt: H3Event) => {
   }
 };
 
+//ลงประวัติ การEDIT member
+export const Ehismember = async (evt: H3Event) => {
+  try {
+    console.log('EHISMEM SS');
+    const result = await memberModel.Ehismember(evt.context.params?.EMAIL as string);
+
+    return {
+      data: result
+    };
+  } catch {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Something went wrong'
+    });
+  }
+};
+
+
 export const adminlogin = async (evt: H3Event) => {
   try {
-    console.log('Ctrl  ad ss');
+    console.log('Ctrl ad ss');
     const result = await adminModel.readAdmin(evt.context.params?.EMAIL as string);
 
     return {
       data: result
     };
   } catch (err) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Something went wrong'
+    });
+  }
+};
+
+//เรียกดูข้อมูล admin
+export const adminread = async () => {
+  try {
+    console.log('Ctrl  r ad ss');
+    const result = await adminModel.adminread();
+
+    return {
+      data: result
+    };
+  } catch (err) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Something went wrong'
+    });
+  }
+};
+
+//ลบข้อมูล admin
+export const removeadmin = async (evt: H3Event) => {
+  try {
+    const result = await adminModel.removeadmin(evt.context.params?.EMAIL as string);
+
+    return {
+      data: result
+    };
+  } catch {
     throw createError({
       statusCode: 500,
       statusMessage: 'Something went wrong'
@@ -476,3 +571,4 @@ export const reset_st_des = async () => {
     });
   }
 };
+

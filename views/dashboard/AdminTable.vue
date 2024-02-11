@@ -1,9 +1,8 @@
 <script setup lang="ts">
 
-import type { authenModel } from '~~/server/model/bloga';
+import type { adminModel } from '~~/server/model/blogad';
 
 const headers = [
-{ title: 'User', key: 'username' },
 { title: 'E-mail', key: 'email' },
 { title: 'Password', key: 'password' },
 { title: 'Action', key: 'action' },
@@ -27,31 +26,17 @@ const resolveUserstatusVariant = (status: string) => {
   return { color: 'undefined', icon: 'ri-user-line' }
 }
 
-const data = ref<authenModel[]>([]);
+const data = ref<adminModel[]>([]);
 
-//เรียกดู
 const fetchData = async () => {
   try {
-    const result = await $fetch('/api/authen_dash');
-    data.value = result.data as authenModel[];
+    const result = await $fetch('/api/admin');
+    data.value = result.data as adminModel[];
   } catch {
     alert('Fetch error');
   }
 };
 
-//ลงประวัตอว่าย้าย
-const Mhistorytrack = async (EMAIL: string) => {
-  try {
-    await $fetch('/api/authen_dash/Mhistory/' + EMAIL, {
-      method: 'POST'
-    });
-
-  } catch {
-    alert('History Error');
-  }
-};
-
-//ลงประวัตอว่าลบ
 const Dhistorytrack = async (EMAIL: string) => {
   try {
     await $fetch('/api/authen_dash/Dhistory/' + EMAIL, {
@@ -63,28 +48,14 @@ const Dhistorytrack = async (EMAIL: string) => {
   }
 };
 
-const onMove = async (EMAIL: string) => {
-  try {
-    await $fetch('/api/authen_dash/' + EMAIL, {
-      method: 'POST'
-    });
-    alert('Add Admin Sucess');
-    await Mhistorytrack(EMAIL);
-    await onDelete(EMAIL,'Flase');
-  } catch {
-    alert('Add Admin Error');
-  }
-};
-
-//
 const onDelete = async (EMAIL: string,WHTRACK: string) => {
   if (WHTRACK==='True'){
     await Dhistorytrack(EMAIL);
-    alert('Delete Authen Request Sucess');
+    alert('Delete Admin Sucess');
   }
 
   try {
-    await $fetch('/api/authen_dash/' + EMAIL, {
+    await $fetch('/api/admin/' + EMAIL, {
       method: 'DELETE'
     });
     
@@ -108,17 +79,6 @@ onMounted(fetchData);
       class="text-no-wrap"
     >
 
-    <!-- User -->
-    <template #item.username="{ item }" slot="item.EMAIL" scope="props">
-        <div class="d-flex align-center gap-x-4">
-          {{ $props }}
-          <div class="d-flex flex-column">
-            <h6 class="text-h6 font-weight-medium user-list-name">
-              {{ item.F_NAME }}  {{ item.L_NAME }} 
-            </h6>
-          </div>
-        </div>
-      </template>
     
     <!-- Email -->
     <template #item.email="{ item }">
@@ -127,15 +87,11 @@ onMounted(fetchData);
 
       <!-- Password -->
       <template #item.password="{ item }">
-          {{ item.F_NAME }}
+          {{ item.PASSWORD }}
       </template>
 
-      <!-- Action -->
+      <!-- Time -->
       <template #item.action="{ item }">
-          <v-btn @click="() => onMove(item.EMAIL)"> 
-            <VIcon icon="ri-user-star-line" size="22"/>
-        </v-btn>
-          <h> &nbsp;</h>
           <VBtn color="error" @click="() => onDelete(item.EMAIL,'True')">
           <VIcon icon="ri-user-unfollow-line" size="22"/>
           </VBtn>

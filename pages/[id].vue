@@ -29,22 +29,96 @@ const refInputEl = ref<HTMLElement>()
 
 const data = ref<memberModel[]>([]);
 
-const onSubmit = async () => {
+//ลงประวัติ
+const Ehistorytrack = async (EMAIL: string) => {
   try {
-    await $fetch('/api/member_dash/edit/' + 'KCICE50@GMAIL.COM', {
+    await $fetch('/api/member_dash/Ehistory/' + EMAIL, {
+      method: 'POST'
+    });
+
+  } catch {
+    alert('History Error');
+  }
+};
+
+//ตรวจสอบ status
+const readstatus = async () => {
+  try {
+    const result = await $fetch('/api/status');
+    //alert(result);
+    //alert(JSON.parse(result)); 
+    //alert(JSON.parse(result)[0].DESTROY);
+    //alert(result);
+
+    return JSON.parse(result)[0].EDIT;
+  } catch {
+    alert('ST E Error');
+  }
+};
+
+//edit card
+const edit_card = async (STU_ID: string) => {
+  try {
+    //await readstatus();
+    await $fetch('/api/status/change_st_/edit/' + STU_ID, {
+      method: 'POST'
+    });
+
+  } catch {
+    alert('Edit Card Error');
+  }
+};
+
+const onSubmit = async () => {
+  const status_EDIT = await readstatus();
+  if (accountDataLocal.F_NAME == ""){
+    alert ('Required First Name');
+  }
+  else if (accountDataLocal.L_NAME == ""){
+    alert ('Required Last Name');
+  }
+  else if (accountDataLocal.EMAIL == ""){
+    alert ('Required Email');
+  }
+  else if (!accountDataLocal.EMAIL.includes("@")){
+    alert ('Required "@" in Email');
+  }
+  else if (accountDataLocal.STU_ID == ""){
+    alert ('Required Student ID');
+  }
+  else if (accountDataLocal.GRADE == ""){
+    alert ('Required Grade');
+  }
+  else if (accountDataLocal.ROOM == ""){
+    alert ('Required Room');
+  }
+  else if (accountDataLocal.NUMBER == null){
+    alert ('Required Number');
+  }
+  else{
+
+  if(status_EDIT == '00000'){
+  try {
+    await $fetch('/api/member_dash/edit/' + route.params.id, {
       method: 'PUT',
       body: accountDataLocal
     });
+    edit_card(accountDataLocal.STU_ID);
+    Ehistorytrack(accountDataLocal.EMAIL);
 
     router.push('/member_dash');
   } catch {
     alert('Edit Error');
   }
+}else{
+  alert('Have Other Edit Status');
+}
+}
 };
 
 const fetchData = async () => {
   try {
-    const result = (await $fetch('/api/member_dash/edit/' + 'KCICE50@GMAIL.COM')) as any;
+    const result = (await $fetch('/api/member_dash/edit/' + route.params.id)) as any;
     const data = result.data as memberModel;
 
     accountDataLocal.F_NAME = data.F_NAME;
@@ -68,7 +142,7 @@ const accountDataLocal = reactive({
   L_NAME: '',
   GRADE: '',
   ROOM: '',
-  NUMBER: null,
+  NUMBER: 0,
   EMAIL: '',
   LOGINCOUNT : '',
   LOGINCHECK : '',
@@ -84,13 +158,36 @@ onMounted(fetchData);
 </script>
 
 <template>
+   <div>
+    <VTabs
+      show-arrows
+    >
+      <VTab
+        v-for="item in tabs"
+        :key="item.icon"
+        :value="item.tab"
+      >
+        <VIcon
+          size="20"
+          start
+          :icon="item.icon"
+        />
+        {{ item.title }}
+      </VTab>
+    </VTabs>
+
+    <VWindow
+      class="mt-5 disable-tab-transition"
+      :touch="false"
+    >
+      <!-- Account -->
+      <VWindowItem value="account">
   <VRow>
     <VCol cols="12">
       <VCard title="Account Details">
         <VDivider />
 
         <VCardText>
-          fff : {{ route.params.id}}
           <!-- 👉 Form -->
           <VForm class="mt-6">
             <VRow>
@@ -212,4 +309,7 @@ onMounted(fetchData);
       </VCard>
     </VCol>
   </VRow>
+</VWindowItem>      
+</VWindow>
+</div>
 </template>

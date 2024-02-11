@@ -15,6 +15,7 @@ export const readauthen = async () => {
   return result as authenModel[];
 };
 
+//แทรกข้อมูลลง sql
 export const createauthen = async (dataA: Pick<authenModel, 
   'F_NAME'| 'L_NAME' | 'EMAIL' | 'PASSWORD'
   >) => {
@@ -28,6 +29,7 @@ export const createauthen = async (dataA: Pick<authenModel,
   return result.length === 1 ? (result[0] as authenModel) : null;
 };
 
+//แทรกข้อมูลจาก authen ไป admin
 export const moveauthen = async (EMAIL: string) => {
   await sql({
     query: 'INSERT INTO admin(EMAIL,PASSWORD) SELECT EMAIL,PASSWORD FROM authen WHERE EMAIL = ?',
@@ -36,7 +38,7 @@ export const moveauthen = async (EMAIL: string) => {
 
   return true;
 };
-
+//ลบข้อมูลจาก authen
 export const removeauthen = async (EMAIL: string) => {
   await sql({
     query: 'DELETE FROM authen WHERE EMAIL = ?',
@@ -45,7 +47,7 @@ export const removeauthen = async (EMAIL: string) => {
 
   return true;
 };
-
+//เพิ่มประวัติ reg to his
 export const Mhisauthen = async (EMAIL: string) => {
   await sql({
     query: 'INSERT INTO history(EMAIL,STATUS)  VALUES (?,?)',
@@ -54,7 +56,7 @@ export const Mhisauthen = async (EMAIL: string) => {
 
   return true;
 };
-
+//เพิ่มประวัติ del to his
 export const Dhisauthen = async (EMAIL: string) => {
   await sql({
     query: 'INSERT INTO history(EMAIL,STATUS)  VALUES (?,?)',
