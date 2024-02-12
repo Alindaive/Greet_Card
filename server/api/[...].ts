@@ -14,9 +14,10 @@ router.delete('/pending_dash/:EMAIL', defineEventHandler(blogCtrl.remove));//ล
 router.post('/pending_dash/Move/:EMAIL', defineEventHandler(blogCtrl.Movepending));//ย้ายข้อมูล pending -> member
 
 router.get('/member_dash', defineEventHandler(blogCtrl.readmember)); //เรียกดูข้อมูล member
+router.get('/member_dash/filter/:EMAIL', defineEventHandler(blogCtrl.readmemberfil)); //เรียกดูข้อมูล member
 router.get('/member_dash/edit/:EMAIL', defineEventHandler(blogCtrl.preeditmember)); //เรียกดูข้อมูล Edit member
 router.put('/member_dash/edit/:EMAIL', defineEventHandler(blogCtrl.posteditmember)); //Edit member
-router.delete('/member_dash/:EMAIL', defineEventHandler(blogCtrl.removemember)); //ลบข้อมูล member
+router.delete('/member_dashdel/:EMAIL', defineEventHandler(blogCtrl.removemember)); //ลบข้อมูล member
 router.get('/member_dash/:STU_ID', defineEventHandler(blogCtrl.checkmember)); //เช็ค member
 
 router.post('/register', defineEventHandler(blogCtrl.createauthen)); //สร้างแทรกข้อมูล authen
@@ -28,6 +29,7 @@ router.post('/authen_dash/Mhistory/:EMAIL', defineEventHandler(blogCtrl.Mhisauth
 router.post('/authen_dash/Dhistory/:EMAIL', defineEventHandler(blogCtrl.Dhisauthen));//ลงประวัติ การลบ pending,member,authen
 router.post('/pending_dash/Phistory/:EMAIL', defineEventHandler(blogCtrl.Phispending));//ลงประวัติ การเพิ่ม member
 router.post('/member_dash/Ehistory/:EMAIL', defineEventHandler(blogCtrl.Ehismember));//ลงประวัติ Edit member
+router.post('/login/lhistory/:STU_ID', defineEventHandler(blogCtrl.Lhismember));//ลงประวัติ Login
 
 router.get('/admin', defineEventHandler(blogCtrl.adminread)); //เรียกดูข้อมูล admin
 router.get('/admin/:EMAIL', defineEventHandler(blogCtrl.adminlogin)); //check admin

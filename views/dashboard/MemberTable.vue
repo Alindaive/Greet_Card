@@ -15,9 +15,9 @@ const route = useRoute();
 const headers = [
 { title: 'No.', key: 'number' },
 { title: 'User', key: 'username' },
-{ title: 'E-mail', key: 'email' },
 { title: 'Student ID', key: 'stu_id' },
-{ title: 'Log-in Check', key: 'login' },
+{ title: 'Log-in(n)', key: 'login' },
+{ title: 'PASS/NOT', key: 'cal' },
 { title: 'Action', key: 'action' },
 ]
 
@@ -171,9 +171,9 @@ const resolveUserstatusVariant = (status: string) => {
 
 const data = ref<memberModel[]>([]);
 
-const fetchData = async () => {
+const fetchData = async (GRADE:string,ROOM:string) => {
   try {
-    const result = await $fetch('/api/member_dash');
+    const result = await $fetch('/api/member_dash/filter/'+GRADE+ROOM);
     data.value = result.data as memberModel[];
   } catch {
     alert('Fetch error');
@@ -200,8 +200,10 @@ const readstatus = async () => {
     //alert(JSON.parse(result)); 
     //alert(JSON.parse(result)[0].DESTROY);
     //alert(result);
-
-    return JSON.parse(result)[0].DESTROY;
+    const status_REG = JSON.parse(result)[0].REG;
+    const status_EDIT = JSON.parse(result)[0].EDIT;
+    const status_DES = JSON.parse(result)[0].DESTROY;
+    return status_REG + status_EDIT + status_DES
   } catch {
     alert('ST D Error');
   }
@@ -223,34 +225,29 @@ const destroy_card = async (STU_ID: string) => {
 //WHTRACK คือเก็บลงหน้าประวัติ historyมั้ย
 //มันจะมีลบสองแบบ ลบด้วยแอดมินกดลบ(เก็บ) กับ ลบเพราะโดนย้าย(ไม่เก็บ)
 const onDelete = async (EMAIL: string,WHTRACK: string,STU_ID: string) => {
-  const status_DES = await readstatus();
+  const status = await readstatus();
+  console.log(status);
 
   //ถ้าstatus_DES ว่าง ให้ เก็บลงหน้าประวัติ -> เพิ่มบัตรรอทำลายได้ -> ลบออกจาก member
-  if(status_DES == '00000'){
+  if(status == '000000000000000'){
 
     if (WHTRACK=='True'){
       await Dhistorytrack(EMAIL);
       alert('Delete Member Sucess');
     }
-
+    //ระเบิด card
+    await destroy_card(STU_ID);
+    //ลบ member ใน db
     try {
-      //ระเบิด card
-      await destroy_card(STU_ID);
-      //ลบ member ใน db
-
-      await $fetch('/api/member_dash/' + EMAIL, {
-        method: 'DELETE'
-      });
-      
-      //เรียกดูข้อมูลใหม่
-      await fetchData();
-  } catch {
+      await $fetch('/api/member_dashdel/' + EMAIL, {method: 'DELETE'});
+      fetchData(mem_cal.GRADE,mem_cal.ROOM);
+    } catch {
     alert('Delete Member Error');
-  }
+    }
 }
   //ถ้าstatus_DES ไม่ว่าง
 else{
-  alert('Have Other Delete Status');
+  alert('Have Other Status');
 }
 };
 
@@ -258,8 +255,20 @@ const onEdit = async (EMAIL: string) => {
   window.location.replace("/" + EMAIL);
 };
 
-onMounted(fetchData);
+const onCal = async (GRADE:string,ROOM:string,MAX_HOUR: number) =>{
+  mem_cal.MAX_HOUR = MAX_HOUR;
+  fetchData(GRADE,ROOM);
+};
 
+const mem_cal = reactive({
+  GRADE: 'E',
+  ROOM: '1',
+  MAX_HOUR: 18
+});
+
+onMounted(async () => {
+await onCal(mem_cal.GRADE,mem_cal.ROOM,mem_cal.MAX_HOUR);
+});
 
 const grade_mem =['A', 'B', 'C', 'D','E']
 const room_mem =['1', '2', '5', '6','G','W']
@@ -275,6 +284,7 @@ const room_mem =['1', '2', '5', '6','G','W']
       :items="grade_mem"
       density="compact"
       label="Grade"
+      v-model="mem_cal.GRADE"
     ></v-select>
     </VCol>
 
@@ -283,18 +293,20 @@ const room_mem =['1', '2', '5', '6','G','W']
       :items="room_mem"
       density="compact"
       label="Room"
+      v-model="mem_cal.ROOM"
     ></v-select>
     </VCol>
 
     <VCol cols="3">
       <VTextField
+                v-model="mem_cal.MAX_HOUR"
                 label="Max Hour "
                 type="number"
               />
     </VCol>
 
     <VCol cols="2">
-      <VBtn>Cal</VBtn>
+      <VBtn @click="() => onCal(mem_cal.GRADE,mem_cal.ROOM,mem_cal.MAX_HOUR)">Cal</VBtn>
     </VCol>
   </VRow>
   <VRow><p> </p></VRow>
@@ -305,6 +317,11 @@ const room_mem =['1', '2', '5', '6','G','W']
       item-value="email"
       class="text-no-wrap"
     >
+    <template #item.grade="{ item }" >
+    <template v-if="item.GRADE == mem_cal.GRADE">
+    </template>
+  </template>
+    
 
       <!-- number -->
       <template #item.number="{ item }">
@@ -320,7 +337,7 @@ const room_mem =['1', '2', '5', '6','G','W']
               {{ item.F_NAME }} {{ item.L_NAME }} 
             </h6>
 
-            <span class="text-sm text-medium-emphasis">@{{ item.EMAIL }}</span>
+            <span class="text-sm text-medium-emphasis">{{ item.EMAIL }}</span>
           </div>
         </div>
       </template>
@@ -337,7 +354,17 @@ const room_mem =['1', '2', '5', '6','G','W']
 
       <!-- login -->
       <template #item.login="{ item }">
-       {{ item.LOGINCOUNT }} / 
+       {{ item.LOGINCOUNT }} / {{ mem_cal.MAX_HOUR }}
+      </template>
+
+      <!-- pass -->
+      <template #item.cal="{ item }">
+        <template v-if="item.LOGINCOUNT > (mem_cal.MAX_HOUR/2)">
+          {{'PASS'}}
+        </template>
+        <template v-else="">
+          {{'NOT PASS'}}
+        </template>
       </template>
 
       <!-- Action -->
@@ -350,9 +377,9 @@ const room_mem =['1', '2', '5', '6','G','W']
           <VIcon icon="ri-delete-bin-2-line" size="22"/>
           </VBtn>
       </template>
-      
 
       <template #bottom />
+      
     </VDataTable>
   </VCard>
 </template>

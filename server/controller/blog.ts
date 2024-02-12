@@ -133,6 +133,22 @@ export const readmember = async () => {
   }
 };
 
+export const readmemberfil = async (evt: H3Event) => {
+  try {
+    console.log('Ctrl  rmf ss');
+    const result = await memberModel.readmemberfil(evt.context.params?.EMAIL as string);
+
+    return {
+      data: result
+    };
+  } catch (err) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Something went wrong'
+    });
+  }
+};
+
 //เรียกดูข้อมูล member
 export const preeditmember = async (evt: H3Event) => {
   try {
@@ -149,7 +165,6 @@ export const preeditmember = async (evt: H3Event) => {
     });
   }
 };
-
 
 //Edit member
 export const posteditmember = async (evt: H3Event) => {
@@ -196,6 +211,7 @@ export const checkmember = async (evt: H3Event) => {
 //ลบข้อมูล member
 export const removemember = async (evt: H3Event) => {
   try {
+    console.log('remove member');
     const result = await memberModel.removemember(evt.context.params?.EMAIL as string);
 
     return {
@@ -345,6 +361,22 @@ export const Ehismember = async (evt: H3Event) => {
   }
 };
 
+//ลงประวัติ การ Login
+export const Lhismember = async (evt: H3Event) => {
+  try {
+    console.log('Log HIS MEM SS');
+    const result = await memberModel.Lhismember(evt.context.params?.STU_ID as string);
+
+    return {
+      data: result
+    };
+  } catch {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Something went wrong'
+    });
+  }
+};
 
 export const adminlogin = async (evt: H3Event) => {
   try {

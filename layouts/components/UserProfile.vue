@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import avatar1 from '@images/avatars/avatar-1.png';
 </script>
 
 <template>
@@ -16,7 +15,7 @@ import avatar1 from '@images/avatars/avatar-1.png';
       color="primary"
       variant="tonal"
     >
-      <VImg :src="avatar1" />
+      <VIcon>ri-user-5-fill</VIcon>
 
       <!-- SECTION Menu -->
       <VMenu
@@ -41,7 +40,7 @@ import avatar1 from '@images/avatars/avatar-1.png';
                     color="primary"
                     variant="tonal"
                   >
-                    <VImg :src="avatar1" />
+                  <VIcon>ri-user-5-fill</VIcon>
                   </VAvatar>
                 </VBadge>
               </VListItemAction>

@@ -23,21 +23,6 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
 
         <VSpacer />
 
-
-        
-        <IconBtn
-          class="me-2"
-          href="https://github.com/themeselection/materio-vuetify-nuxtjs-admin-template-free"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <VIcon icon=""/>
-        </IconBtn>
-
-        <IconBtn class="me-2">
-          <VIcon icon="ri-notification-line" />
-        </IconBtn>
-
         <NavbarThemeSwitcher class="me-2" />
 
         <UserProfile />

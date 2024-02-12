@@ -61,8 +61,9 @@ export const movepending = async (EMAIL: string) => {
 
 export const Phispending = async (EMAIL: string) => {
   await sql({
-    query: 'INSERT INTO history(EMAIL,STATUS)  VALUES (?,?)',
-    values: [EMAIL,'Registor']
+    query: "INSERT INTO history(STU_ID,EMAIL,STATUS) SELECT member.STU_ID,member.EMAIL,'Registor' FROM member WHERE member.EMAIL = ?",
+    values: [EMAIL]
+    
   });
 
   return true;

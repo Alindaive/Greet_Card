@@ -23,6 +23,18 @@ export const readmember = async () => {
   return result as memberModel[];
 };
 
+export const readmemberfil = async (EMAIL: string) => {
+  var GRADE = EMAIL.slice(0,1);
+  var ROOM = EMAIL.slice(1);
+  console.log(GRADE+ROOM);
+  const result = await sql({
+    query: 'SELECT * FROM member WHERE GRADE = ? AND ROOM = ?',
+    values: [GRADE,ROOM]
+  });
+
+  return result as memberModel[];
+};
+
 export const preeditmember = async (EMAIL: string) => {
   const result = (await sql({
     query: 'SELECT * FROM member WHERE EMAIL = ?',
@@ -54,8 +66,17 @@ export const posteditmember = async (EMAIL: string, data: Pick<memberModel, 'F_N
 
 export const Ehismember = async (EMAIL: string) => {
   await sql({
-    query: 'INSERT INTO history(EMAIL,STATUS)  VALUES (?,?)',
-    values: [EMAIL,'edit']
+    query: "INSERT INTO history(STU_ID,EMAIL,STATUS) SELECT member.STU_ID,member.EMAIL,'edit' FROM member WHERE member.EMAIL = ?",
+    values: [EMAIL]
+  });
+
+  return true;
+};
+
+export const Lhismember = async (STU_ID: string) => {
+  await sql({
+    query: "INSERT INTO history(STU_ID,EMAIL,STATUS) SELECT member.STU_ID,member.EMAIL,'login' FROM member WHERE member.STU_ID = ?",
+    values: [STU_ID]
   });
 
   return true;

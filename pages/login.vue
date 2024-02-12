@@ -57,7 +57,7 @@ const handleonlogin = async (EMAIL: string,PASSWORD: string) => {
     if(user_data_db==user_data_re){
       alert('Login Sucess');
       //state.username = EMAIL;
-      localStorage.setItem('CURRENT_USER', EMAIL);
+      //localStorage.setItem('CURRENT_USER', EMAIL);
       window.location.replace('/');
     }
     else{
