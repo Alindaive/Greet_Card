@@ -50,7 +50,10 @@ const readstatus = async () => {
     //alert(JSON.parse(result)[0].DESTROY);
     //alert(result);
 
-    return JSON.parse(result)[0].EDIT;
+    const status_REG = JSON.parse(result)[0].REG;
+    const status_EDIT = JSON.parse(result)[0].EDIT;
+    const status_DES = JSON.parse(result)[0].DESTROY;
+    return status_REG + status_EDIT + status_DES
   } catch {
     alert('ST E Error');
   }
@@ -70,7 +73,7 @@ const edit_card = async (STU_ID: string) => {
 };
 
 const onSubmit = async () => {
-  const status_EDIT = await readstatus();
+  const status = await readstatus();
   if (accountDataLocal.F_NAME == ""){
     alert ('Required First Name');
   }
@@ -97,7 +100,7 @@ const onSubmit = async () => {
   }
   else{
 
-  if(status_EDIT == '00000'){
+    if(status == '000000000000000'){
   try {
     await $fetch('/api/member_dash/edit/' + route.params.id, {
       method: 'PUT',
@@ -106,12 +109,14 @@ const onSubmit = async () => {
     edit_card(accountDataLocal.STU_ID);
     Ehistorytrack(accountDataLocal.EMAIL);
 
+    alert('Edit Sucess');
+
     router.push('/member_dash');
   } catch {
     alert('Edit Error');
   }
 }else{
-  alert('Have Other Edit Status');
+  alert('Have Other Status');
 }
 }
 };

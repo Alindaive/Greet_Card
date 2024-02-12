@@ -190,10 +190,10 @@ const Mhistorytrack = async (EMAIL: string) => {
 
 //ย้าย pending - > member
 const onMove = async (EMAIL: string,STU_ID : string) => {
-  const reg_status = await readstatus();
+  const status = await readstatus();
 
   //ถ้าstatus_REG ว่าง ให้  ย้าย-> เพิ่มบัตรรอทำลายได้ -> ลงประวัติ ->ลบออกจาก member
-  if(reg_status == '00000'){
+  if(status == '000000000000000'){
   try {
     await $fetch('/api/pending_dash/Move/' + EMAIL, {
       method: 'POST'
@@ -206,7 +206,7 @@ const onMove = async (EMAIL: string,STU_ID : string) => {
     alert('Add Member Error');
   }
 }else{
-  alert('Has Another Reg');
+  alert('Has Another Status');
 }
 };
 
@@ -231,7 +231,10 @@ const readstatus = async () => {
     //alert(JSON.parse(result)[0].DESTROY);
     //alert(result);
 
-    return JSON.parse(result)[0].REG;
+    const status_REG = JSON.parse(result)[0].REG;
+    const status_EDIT = JSON.parse(result)[0].EDIT;
+    const status_DES = JSON.parse(result)[0].DESTROY;
+    return status_REG + status_EDIT + status_DES
   } catch {
     alert('ST R Error');
   }

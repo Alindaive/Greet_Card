@@ -279,6 +279,18 @@ const room_mem =['1', '2', '5', '6','G','W']
     <div>
       <VRow><p> </p></VRow>
     <VRow>
+      <VCol cols="1">
+    <v-text sm="6">
+      <div class="text-capitalize text-high-emphasis" >
+        &nbsp&nbsp&nbsp&nbsp&nbsp
+        <VIcon
+            icon="ri-filter-2-line"
+            color="info"
+            size="28"
+          />&nbsp&nbsp&nbsp{{ 'Filter :' }}
+    </div>
+    </v-text>
+    </VCol>
       <VCol cols="3">
     <v-select
       :items="grade_mem"
@@ -305,7 +317,7 @@ const room_mem =['1', '2', '5', '6','G','W']
               />
     </VCol>
 
-    <VCol cols="2">
+    <VCol cols="1">
       <VBtn @click="() => onCal(mem_cal.GRADE,mem_cal.ROOM,mem_cal.MAX_HOUR)">Cal</VBtn>
     </VCol>
   </VRow>
@@ -360,10 +372,22 @@ const room_mem =['1', '2', '5', '6','G','W']
       <!-- pass -->
       <template #item.cal="{ item }">
         <template v-if="item.LOGINCOUNT > (mem_cal.MAX_HOUR/2)">
-          {{'PASS'}}
+          <div class="text-capitalize text-high-emphasis">
+            <VIcon
+            icon="ri-check-double-line"
+            color="success"
+            size="22"
+          /> {{'PASS'}}
+          </div>
         </template>
         <template v-else="">
-          {{'NOT PASS'}}
+          <div class="text-capitalize text-high-emphasis">
+            <VIcon
+            icon="ri-hourglass-fill"
+            color="error"
+            size="22"
+          /> {{'NOT PASS'}}
+          </div>
         </template>
       </template>
 
