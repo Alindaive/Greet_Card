@@ -19,9 +19,9 @@ const readstatus = async () => {
 
 
 const status = reactive({
-  status_REG: '',
-  status_EDIT: '',
-  status_DES: '',
+  status_REG: '00000',
+  status_EDIT: '00000',
+  status_DES: '00000',
 });
 
 onMounted(readstatus);
@@ -60,7 +60,7 @@ definePageMeta({ layout: 'blank' })
     {{status.status_DES}}
     </v-alert>
 </template>
-<template v-else>
+<template v-if="status.status_DES =='00000' && status.status_EDIT =='00000'  && status.status_REG =='00000'">
   <v-alert
       color="undefined"
       icon="ri-loop-right-line"

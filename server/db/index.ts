@@ -6,10 +6,11 @@ interface Options {
 }
 
 const pool = createPool({
-  host: 'greet-card.cpmkke0quzqm.ap-southeast-2.rds.amazonaws.com',
-  user: 'root',
+  host: 'mysql-187897c4-kcice50-9d8d.a.aivencloud.com',
+  user: 'avnadmin',
   database: 'greet_card',
-  password: 'Root1032079'
+  password: 'AVNS_T14WU4AmTF7uU_Wk4oK',
+  port: 24293,
 });
 
 export const sql = async ({ query, values }: Options) => {
