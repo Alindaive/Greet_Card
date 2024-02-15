@@ -457,6 +457,21 @@ export const loginc = async (evt: H3Event) => {
   }
 };
 
+export const logincount = async (evt: H3Event) => {
+  try {
+    console.log('Ctrl logincount ss');
+    const result = await memberModel.logincount(evt.context.params?.STU_ID as string);
+    var str = JSON.stringify(result[0]);
+    var sliced = str.slice(14, -1); 
+    return sliced;
+  } catch (err) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Something went wrong'
+    });
+  }
+};
+
 export const readstatus = async () => {
   try {
     console.log('Ctrl  rs ss');

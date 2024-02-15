@@ -1,0 +1,414 @@
+#include <WiFiManager.h>
+#include <HTTPClient.h>
+#include <MFRC522.h>
+#include <SPI.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
+#include <Arduino.h>
+#include <ArduinoJson.h>
+using namespace std;
+WiFiManager wm;
+
+//************************************************************************
+#define SS_PIN  21  //D2
+#define RST_PIN 22  //D1
+//************************************************************************
+MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance.
+//************************************************************************
+#define led_red    27
+#define led_yellow 26
+#define led_green  25
+#define led_blue   33
+#define led_white  32
+//************************************************************************
+#define buzzer 34
+//************************************************************************
+void r_sound(){
+  digitalWrite(buzzer,LOW);  // turn the LED on (HIGH is the voltage level)
+  delay(2000);
+  digitalWrite(buzzer,HIGH);  // turn the LED off (HIGH is the voltage level) 
+}
+
+void red_light(){
+  digitalWrite(led_red,HIGH);  // turn the LED on (HIGH is the voltage level)
+  delay(2000);
+  digitalWrite(led_red,LOW);  // turn the LED off (HIGH is the voltage level) 
+}
+void yellow_light(){
+  digitalWrite(led_yellow,HIGH);  // turn the LED on (HIGH is the voltage level)
+  delay(2000);
+  digitalWrite(led_yellow,LOW);  // turn the LED off (HIGH is the voltage level)  
+}
+void green_light(){
+  digitalWrite(led_green,HIGH);  // turn the LED on (HIGH is the voltage level)
+  delay(2000);
+  digitalWrite(led_green,LOW);  // turn the LED off (HIGH is the voltage level) 
+}
+void blue_light(){
+  digitalWrite(led_blue,HIGH);  // turn the LED on (HIGH is the voltage level)
+  delay(2000);
+  digitalWrite(led_blue,LOW);  // turn the LED off (HIGH is the voltage level)
+}
+void white_light(){
+  digitalWrite(led_white,HIGH);  // turn the LED on (HIGH is the voltage level)
+  delay(2000);
+  digitalWrite(led_white,LOW);  // turn the LED off (HIGH is the voltage level)
+}
+void all_light(){
+  digitalWrite(led_red,HIGH);  // turn the LED on (HIGH is the voltage level)
+  digitalWrite(led_yellow,HIGH);  // turn the LED on (HIGH is the voltage level)
+  digitalWrite(led_green,HIGH);  // turn the LED on (HIGH is the voltage level)
+  digitalWrite(led_blue,HIGH);  // turn the LED on (HIGH is the voltage level)
+  digitalWrite(led_white,HIGH);  // turn the LED on (HIGH is the voltage level)
+  delay(2000);
+  digitalWrite(led_white,LOW);  // turn the LED off (HIGH is the voltage level)
+  digitalWrite(led_blue,LOW);  // turn the LED off (HIGH is the voltage level)
+  digitalWrite(led_green,LOW);  // turn the LED off (HIGH is the voltage level) 
+  digitalWrite(led_yellow,LOW);  // turn the LED off (HIGH is the voltage level) 
+  digitalWrite(led_red,LOW);  // turn the LED off (HIGH is the voltage level)  
+  
+}
+
+String test() {
+  String rev = "test";
+  return rev;
+}
+String check_login(String stu_id){
+  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/logincheck/" + stu_id;
+
+  String content;
+  HTTPClient http;
+  http.begin(url);
+  int httpCode = http.GET();
+  if (httpCode == 200) {
+    content = http.getString();
+    //Serial.println("Now Status is : ");
+    //Serial.println(content);
+  }
+  return content;
+}
+
+void loginhistory(String stu_id) {
+  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/login/lhistory/" + stu_id;
+
+  String content;
+  HTTPClient http;
+  http.begin(url);
+  String httpRequestData = "";
+  int httpCode = http.POST(httpRequestData);
+  if (httpCode == 200) {
+    Serial.println("login history");
+  }
+}
+
+void login(String stu_id) {
+  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/login/" + stu_id;
+
+  String content;
+  HTTPClient http;
+  http.begin(url);
+  String httpRequestData = "";
+  int httpCode = http.POST(httpRequestData);
+  if (httpCode == 200) {
+    Serial.println("login + 1");
+  }
+}
+
+String check_member(String stu_id){
+  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/member_dash/" + stu_id;
+
+  String content;
+  HTTPClient http;
+  http.begin(url);
+  int httpCode = http.GET();
+  if (httpCode == 200) {
+    content = http.getString();
+    //Serial.println("Now Status is : ");
+    //Serial.println(content);
+  }
+  return content;
+}
+void reset_reg() {
+  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/status/reset_st_/reg";
+
+  String content;
+  HTTPClient http;
+  http.begin(url);
+  String httpRequestData = "";
+  int httpCode = http.POST(httpRequestData);
+  if (httpCode == 200) {
+    Serial.println("reset_reg_status");
+  }
+}
+void reset_edit() {
+  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/status/reset_st_/edit";
+
+  String content;
+  HTTPClient http;
+  http.begin(url);
+  String httpRequestData = "";
+  int httpCode = http.POST(httpRequestData);
+  if (httpCode == 200) {
+    Serial.println("reset_edit_status");
+  }
+}
+void reset_des() {
+  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/status/reset_st_/des";
+
+  String content;
+  HTTPClient http;
+  http.begin(url);
+  String httpRequestData = "";
+  int httpCode = http.POST(httpRequestData);
+  if (httpCode == 200) {
+    Serial.println("reset_des_status");
+  }
+}
+String check_status_reg(){
+  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/status/reg";
+
+  String content;
+  HTTPClient http;
+  http.begin(url);
+  int httpCode = http.GET();
+  if (httpCode == 200) {
+    content = http.getString();
+    //Serial.println("Now Status is : ");
+    //Serial.println(content);
+  }
+  return content;
+}
+String check_status_edit(){
+  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/status/edit";
+
+  String content;
+  HTTPClient http;
+  http.begin(url);
+  int httpCode = http.GET();
+  if (httpCode == 200) {
+    content = http.getString();
+    //Serial.println("Now Status is : ");
+    //Serial.println(content);
+  }
+  return content;
+}
+String check_status_des(){
+  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/status/des";
+
+  String content;
+  HTTPClient http;
+  http.begin(url);
+  int httpCode = http.GET();
+  if (httpCode == 200) {
+    content = http.getString();
+    //Serial.println("Now Status is : ");
+    //Serial.println(content);
+  }
+  return content;
+}
+
+String write_card(String stu_id){
+  // Prepare key - all keys are set to FFFFFFFFFFFFh at chip delivery from the factory.
+  MFRC522::MIFARE_Key key;
+  for (byte i = 0; i < 6; i++) key.keyByte[i] = 0xFF;
+
+  byte buffer[34];
+  byte block;
+  MFRC522::StatusCode status;
+  byte len;
+
+  Serial.setTimeout(20000L) ;     // wait until 20 seconds for input from serial
+  String g = stu_id;
+  g.getBytes(buffer, g.length()+1);
+  for(byte i = g.length(); i < 34; i++) buffer[i] = ' ';
+
+
+  block = 4;
+
+  //check block
+  status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, block, &key, &(mfrc522.uid));
+  if (status != MFRC522::STATUS_OK) {
+    Serial.print(F("PCD_Authenticate() failed: "));
+    Serial.println(mfrc522.GetStatusCodeName(status));
+    return "0";
+  }
+
+  // Write block
+  status = mfrc522.MIFARE_Write(block, buffer, 16);
+  if (status != MFRC522::STATUS_OK) {
+    Serial.print(F("MIFARE_Write() failed: "));
+    Serial.println(mfrc522.GetStatusCodeName(status));
+    return "0";
+  }
+  else {Serial.println(F("MIFARE_Write() success: "));
+      return "Write SS";
+  }
+}
+
+void end(){
+  mfrc522.PICC_HaltA(); // Halt PICC
+  mfrc522.PCD_StopCrypto1();  // Stop encryption on PCD
+}
+
+String read_card() {
+  // Prepare key - all keys are set to FFFFFFFFFFFFh at chip delivery from the factory.
+  MFRC522::MIFARE_Key key;
+  for (byte i = 0; i < 6; i++) key.keyByte[i] = 0xFF;
+
+  //some variables we need
+  byte block;
+  byte len;
+  MFRC522::StatusCode status;
+
+  //-------------------------------------------
+
+  byte buffer1[18];
+
+  block = 4;
+  len = 18;
+
+  //check block
+  status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, 4, &key, &(mfrc522.uid)); //line 834 of MFRC522.cpp file
+  if (status != MFRC522::STATUS_OK) {
+    Serial.print(F("Authentication failed: "));
+    Serial.println(mfrc522.GetStatusCodeName(status));
+    return "0";
+  }
+  
+  // read block
+  status = mfrc522.MIFARE_Read(block, buffer1, &len);
+  if (status != MFRC522::STATUS_OK) {
+    Serial.print(F("Reading failed: "));
+    Serial.println(mfrc522.GetStatusCodeName(status));
+    return "0";
+  }
+
+ String str = "";
+  //PRINT FIRST NAME
+  for (uint8_t i = 0; i < 16; i++)
+  {
+    if (buffer1[i] != 32)
+    {
+      //Serial.write(buffer1[i]);
+      str += buffer1[i]-48;
+    }
+  }
+  if(str=="-48-48-48-48-48-48-48-48-48-48-48-48-48-48-48-48"){str = "00000000000";}
+  Serial.println(F("**Card Detected:**"));
+  Serial.print(F("Student ID : "));
+  Serial.println(str);
+
+  //----------------------------------------
+  return str;
+  Serial.println("MIFARE_READ() success: ");
+}
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(led_red,OUTPUT);
+  pinMode(led_yellow,OUTPUT);
+  pinMode(led_green,OUTPUT);
+  pinMode(led_blue,OUTPUT);
+  pinMode(led_white,OUTPUT);
+  //pinMode(buzzer,OUTPUT);
+
+  //เชื่อมต่อไวไฟ
+  if(wm.autoConnect("@WiFI To IOT")){
+    Serial.println("Auto Connect WIFI CHANEL");
+  }else{
+    Serial.println("Not SS");
+    Serial.println("Pls connect to IOT WIFI TO SELECT THE WIFI CHANEL");
+    delay(1000);
+    ESP.restart();
+  }
+  //check_status();
+
+  SPI.begin();               // Init SPI bus
+  mfrc522.PCD_Init();        // Init MFRC522 card
+  //Serial.println(F("Write personal data on a MIFARE PICC "));
+
+}
+
+void loop() {
+  // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
+  if ( ! mfrc522.PICC_IsNewCardPresent()) {
+    return;
+  }
+
+  // Select one of the cards
+  if ( ! mfrc522.PICC_ReadCardSerial()) {
+    return;
+  }
+  Serial.println("waiting...");
+  //write_card("62040626201");
+  //read_card();
+  //String gh = test();
+  //Serial.println(gh);
+
+  //end();
+
+  //Serial.println(check_status_reg());
+  //Serial.println(check_status_edit());
+  //Serial.println(check_status_des());
+
+  if(check_status_reg()!= "00000"){ //สถานะไม่เป็นว่าง มีค่าสถานะเข้ามา
+    if(read_card()=="00000000000"){//เช็คบัตรว่าเลขบัตรนี้ว่างมั้ย(เป็นค่าพื้นฐานมาจากโรงงาน)
+      Serial.println("Registering New Card"); //แสดงผล
+        if(write_card(check_status_reg()) == "Write SS"){ //เรียกใช้การเขียนการ์ด และ ดูว่าเขียนสำเร็จมั้ย
+          reset_reg(); //เรียกใช้ล้างสถานะ ให้กลับไปเป็นว่าง
+          blue_light();
+        }
+        else{
+          end();
+          red_light();
+        }
+    }
+  }
+
+  else if (check_status_edit()!="00000"){
+        Serial.println("Edit Card");
+          if(write_card(check_status_edit()) == "Write SS"){ //เรียกใช้การเขียนการ์ด และ ดูว่าเขียนสำเร็จมั้ย
+            reset_edit(); //เรียกใช้ล้างสถานะ ให้กลับไปเป็นว่าง
+            yellow_light();
+          }
+          else{
+          end();
+          red_light();
+    }   
+  }
+
+  else if (check_status_des()!="00000"){
+    if(read_card()==check_status_des()){//เช็คบัตรว่าเลขบัตรกับเลขในสถานะมั้ย ป้องกันการลบบัตรผิดใบ
+          Serial.println("Destroy Card");
+          if(write_card("00000000000") == "Write SS"){ //เรียกใช้การเขียนการ์ด และ ดูว่าเขียนสำเร็จมั้ย
+              reset_des(); //เรียกใช้ล้างสถานะ ให้กลับไปเป็นว่าง
+              all_light();
+            }
+          else{
+          end();
+          red_light();
+          } 
+    }
+  }
+
+  String login_num = read_card();
+    if (login_num == check_member(login_num)){
+      if(check_login(login_num)== "0"){//จำกัดการล้อกอิน
+        login(login_num);
+        loginhistory(login_num);
+        green_light();
+      }
+      Serial.println("Login limit"); //
+      white_light();
+      //r_sound();
+  }
+
+  end();
+  //delay(1000);
+
+}
+
+
+ 

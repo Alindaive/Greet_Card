@@ -104,7 +104,7 @@ export const login = async (STU_ID: string) => {
   try{
     //console.log('sql login ss');
     const result = (await sql({
-      query: 'UPDATE member SET LOGINCOUNT = LOGINCOUNT + 1 , LOGINCHECK = "1" WHERE STU_ID = ?',
+      query: "UPDATE member SET LOGINCOUNT = LOGINCOUNT + 1 , LOGINCHECK = '1' WHERE STU_ID = ?",
       values: [STU_ID]
     })) as any;
   
@@ -114,7 +114,7 @@ export const login = async (STU_ID: string) => {
   }
   };
 
-  export const loginc = async (STU_ID: string) => {
+export const loginc = async (STU_ID: string) => {
     try{
       //console.log('sql login ss');
       const result = (await sql({
@@ -126,4 +126,18 @@ export const login = async (STU_ID: string) => {
     }catch{
       console.log('sql f');
     }
-    };
+};
+
+export const logincount = async (STU_ID: string) => {
+  try{
+    //console.log('sql login ss');
+    const result = (await sql({
+      query: 'SELECT LOGINCOUNT FROM member WHERE STU_ID = ?',
+      values: [STU_ID]
+    })) as any;
+  
+    return result as memberModel[];
+  }catch{
+    console.log('sql f');
+  }
+};

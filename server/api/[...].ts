@@ -36,7 +36,8 @@ router.get('/admin/:EMAIL', defineEventHandler(blogCtrl.adminlogin)); //check ad
 router.delete('/admin/:EMAIL', defineEventHandler(blogCtrl.removeadmin)); // admindelete
 
 router.post('/login/:STU_ID', defineEventHandler(blogCtrl.login)); //
-router.get('/logincount/:STU_ID', defineEventHandler(blogCtrl.loginc)); //
+router.get('/logincheck/:STU_ID', defineEventHandler(blogCtrl.loginc)); //
+router.get('/logincount/:STU_ID', defineEventHandler(blogCtrl.logincount)); //
 
 router.get('/status', defineEventHandler(blogCtrl.readstatus)); //
 router.get('/status/reg', defineEventHandler(blogCtrl.readstatusreg)); //
