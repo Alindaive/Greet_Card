@@ -1,4 +1,27 @@
 <script setup lang="ts">
+var user = "Unknow"
+const router = useRouter();
+
+function getUser() {
+  document.cookie = ``;
+  //alert(document.cookie);
+  if(document.cookie != ""){
+    var str = document.cookie
+    user = str.slice(9);
+  }
+}
+
+function resetAllCookies() {
+  document.cookie = ``;
+  const cookiesArray = document.cookie.split('; ');
+
+  for (let cookie of cookiesArray) {
+    const [cookieName] = cookie.split('=');
+    document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  }
+  router.push('/login');
+}
+onMounted(getUser);
 </script>
 
 <template>
@@ -47,14 +70,14 @@
             </template>
 
             <VListItemTitle class="font-weight-semibold">
-              John Doe
+              {{ user }}
             </VListItemTitle>
             <VListItemSubtitle>Admin</VListItemSubtitle>
           </VListItem>
           <VDivider class="my-2" />
 
           <!-- 👉 Logout -->
-          <VListItem to="/login">
+          <VListItem @click="resetAllCookies()">
             <template #prepend>
               <VIcon
                 class="me-2"

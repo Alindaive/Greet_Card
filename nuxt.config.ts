@@ -123,4 +123,6 @@ export default defineNuxtConfig({
   },
 
   modules: ['@vueuse/nuxt', '@nuxtjs/device', '@pinia/nuxt'],
+  
+  
 })

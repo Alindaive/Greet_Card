@@ -15,3 +15,20 @@ export const readhistory = async () => {
 
   return result as historyModel[];
 };
+
+export const readhistoryfil = async (EMAIL: string) => {
+  var stamemt = "SELECT history.STU_ID, history.EMAIL, history.STATUS,history.TIMEOFH FROM history LEFT JOIN member ON history.STU_ID = member.STU_ID WHERE member.GRADE = ? AND member.ROOM = ? AND history.STATUS like ? ORDER BY history.TIMEOFH DESC"
+  var GRADE = EMAIL.slice(0,1);
+  var ROOM = EMAIL.slice(1,2);
+  var ACTION = EMAIL.slice(2);
+  if(ACTION == "All"){ACTION = '%'};
+  if(ACTION == "Admin"){stamemt = "SELECT * FROM history WHERE STATUS = 'Admin'"};
+  if(ACTION == "Delete"){stamemt = "SELECT * FROM history WHERE STATUS = 'Delete'"};
+  console.log(ACTION);
+  const result = await sql({
+    query: stamemt,
+    values: [GRADE,ROOM,ACTION]
+  });
+
+  return result as historyModel[];
+};

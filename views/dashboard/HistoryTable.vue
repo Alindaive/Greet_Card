@@ -19,9 +19,9 @@ const headers = [
 
 const data = ref<historyModel[]>([]);
 
-const fetchData = async () => {
+const fetchData = async (GRADE:string,ROOM:string,ACTION: string) => {
   try {
-    const result = await $fetch('/api/history_dash');
+    const result = await $fetch('/api/history_dash/filter/' + GRADE+ROOM+ACTION);
     data.value = result.data as historyModel[];
   } catch {
     alert('Fetch error');
@@ -175,15 +175,91 @@ const resolveUserstatusVariant = (status: string) => {
 
   return { color: 'undefined', icon: 'ri-user-line' }
 }
+const search = '';
 
-onMounted(fetchData);
+const his = reactive({
+  search: '',
+});
+
+const his_cal = reactive({
+  STU_ID:'',
+  GRADE: 'E',
+  ROOM: '1',
+  ACTION: 'All',
+});
+
+const action_his = ['Login', 'Delete', 'Registor', 'Edit','Admin','All',]
+const grade_his =['A', 'B', 'C', 'D','E']
+const room_his =['1', '2', '5', '6','G','W']
+
+
+
+onMounted(async () => {
+await fetchData(his_cal.GRADE,his_cal.ROOM,his_cal.ACTION);
+});
 </script>
 
 <template>
   <VCard>
+    <VROW>
+      <VCol cols="6">
+      <VTextField
+                v-model="search"
+                label="Student ID :"
+                type="text"
+              />
+    </VCol></VROW>
+    <VRow><p> </p></VRow>
+      <VRow>
+      <VCol cols="1">
+      <v-text sm="6">
+      <div class="text-capitalize text-high-emphasis" >
+        &nbsp&nbsp&nbsp&nbsp&nbsp
+        <VIcon
+            icon="ri-filter-2-line"
+            color="info"
+            size="28"
+          />&nbsp&nbsp&nbsp{{ 'Filter :' }}
+      </div>
+      </v-text>
+      </VCol>
+      <VCol cols="3">
+      <v-select
+        :items="grade_his"
+        density="compact"
+        label="Grade"
+        v-model="his_cal.GRADE"
+      ></v-select>
+    </VCol>
+
+    <VCol cols="3">
+      <v-select
+        :items="room_his"
+        density="compact"
+        label="Room"
+        v-model="his_cal.ROOM"
+      ></v-select>
+    </VCol>
+
+    <VCol cols="3">
+      <v-select
+        :items="action_his"
+        density="compact"
+        label="Action"
+        v-model="his_cal.ACTION"
+      ></v-select>
+    </VCol>
+
+    <VCol cols="1">
+      <VBtn @click="() => fetchData(his_cal.GRADE,his_cal.ROOM,his_cal.ACTION)"><VIcon size="22">ri-user-search-line</VIcon></VBtn>
+    </VCol>
+      </VRow>
+  <VRow><p> </p></VRow>
+
     <VDataTable
       :headers="headers"
       :items="data"
+      :search="search"
       item-value=""
       class="text-no-wrap"
     >

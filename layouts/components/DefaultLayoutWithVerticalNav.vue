@@ -6,6 +6,18 @@ import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 // Components
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
+
+const router = useRouter();
+
+function getCookie() {
+  document.cookie = ``;
+  //alert(document.cookie);
+  if(document.cookie == ""){
+    alert('Please Login First');
+    router.push('/login');
+  }
+}
+onMounted(getCookie);
 </script>
 
 <template>

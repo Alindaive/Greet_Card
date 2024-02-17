@@ -18,7 +18,6 @@
     "@vueuse/core": "^10.5.0",
     "@vueuse/math": "^10.5.0",
     "apexcharts": "3.37.0",
-    "axios": "^1.6.5",
     "composer": "^4.1.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
@@ -35,6 +34,7 @@
     "vue3-apexcharts": "^1.4.4",
     "vue3-perfect-scrollbar": "^1.6.1",
     "vuetify": "3.4.9",
+    "vuex": "^4.1.0",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {

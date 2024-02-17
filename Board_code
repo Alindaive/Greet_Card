@@ -76,7 +76,7 @@ String test() {
   return rev;
 }
 String check_login(String stu_id){
-  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/logincheck/" + stu_id;
+  String url = "https://main--charming-speculoos-a11dbf.netlify.app/api/logincheck/" + stu_id;
 
   String content;
   HTTPClient http;
@@ -91,7 +91,7 @@ String check_login(String stu_id){
 }
 
 void loginhistory(String stu_id) {
-  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/login/lhistory/" + stu_id;
+  String url = "https://main--charming-speculoos-a11dbf.netlify.app/api/login/lhistory/" + stu_id;
 
   String content;
   HTTPClient http;
@@ -104,7 +104,7 @@ void loginhistory(String stu_id) {
 }
 
 void login(String stu_id) {
-  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/login/" + stu_id;
+  String url = "https://main--charming-speculoos-a11dbf.netlify.app/api/login/" + stu_id;
 
   String content;
   HTTPClient http;
@@ -117,7 +117,7 @@ void login(String stu_id) {
 }
 
 String check_member(String stu_id){
-  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/member_dash/" + stu_id;
+  String url = "https://main--charming-speculoos-a11dbf.netlify.app/api/member_dash/" + stu_id;
 
   String content;
   HTTPClient http;
@@ -131,7 +131,7 @@ String check_member(String stu_id){
   return content;
 }
 void reset_reg() {
-  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/status/reset_st_/reg";
+  String url = "https://main--charming-speculoos-a11dbf.netlify.app/api/status/reset_st_/reg";
 
   String content;
   HTTPClient http;
@@ -143,7 +143,7 @@ void reset_reg() {
   }
 }
 void reset_edit() {
-  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/status/reset_st_/edit";
+  String url = "https://main--charming-speculoos-a11dbf.netlify.app/api/status/reset_st_/edit";
 
   String content;
   HTTPClient http;
@@ -155,7 +155,7 @@ void reset_edit() {
   }
 }
 void reset_des() {
-  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/status/reset_st_/des";
+  String url = "https://main--charming-speculoos-a11dbf.netlify.app/api/status/reset_st_/des";
 
   String content;
   HTTPClient http;
@@ -167,7 +167,7 @@ void reset_des() {
   }
 }
 String check_status_reg(){
-  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/status/reg";
+  String url = "https://main--charming-speculoos-a11dbf.netlify.app/api/status/reg";
 
   String content;
   HTTPClient http;
@@ -181,7 +181,7 @@ String check_status_reg(){
   return content;
 }
 String check_status_edit(){
-  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/status/edit";
+  String url = "https://main--charming-speculoos-a11dbf.netlify.app/api/status/edit";
 
   String content;
   HTTPClient http;
@@ -195,7 +195,7 @@ String check_status_edit(){
   return content;
 }
 String check_status_des(){
-  String url = "https://main.drwmis6h4kvst.amplifyapp.com/api/status/des";
+  String url = "https://main--charming-speculoos-a11dbf.netlify.app/api/status/des";
 
   String content;
   HTTPClient http;

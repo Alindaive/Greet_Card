@@ -58,6 +58,7 @@ const handleonlogin = async (EMAIL: string,PASSWORD: string) => {
       alert('Login Sucess');
       //state.username = EMAIL;
       //localStorage.setItem('CURRENT_USER', EMAIL);
+      setCookie('username', EMAIL, 1);
       window.location.replace('/');
     }
     else{
@@ -121,6 +122,18 @@ const authThemeMask = computed(() => {
 })
 
 const isPasswordVisible = ref(false)
+
+function setCookie(name: String, value : String, days :number) {
+  let expires = '';
+  if (days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = `; expires=${date.toUTCString()}`;
+  }
+  document.cookie = `${name}=${value || ''}${expires}; path=/`;
+
+  alert(document.cookie);
+}
 
 definePageMeta({ layout: 'blank' })
 </script>

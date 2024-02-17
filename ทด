@@ -81,3 +81,11 @@ UPDATE status SET REG = '54555555' WHERE INDEX_NUM = 1;
               :src="item.avatar"
             />
           </VAvatar>
+
+SELECT history.STU_ID, history.EMAIL, history.STATUS,history.TIMEOFH FROM history LEFT JOIN member ON history.STU_ID = member.STU_ID WHERE member.GRADE = 'A' AND member.ROOM = '1' AND history.STATUS = 'edit' ORDER BY history.TIMEOFH DESC;
+
+SELECT history.STU_ID, history.EMAIL, history.STATUS,history.TIMEOFH,member.GRADE
+FROM history
+LEFT JOIN member
+ON history.STU_ID = member.STU_ID
+ORDER BY history.TIMEOFH DESC;

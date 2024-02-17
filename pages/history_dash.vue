@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import HistoryTable from '@/views/dashboard/HistoryTable.vue';
-
 </script>
 
 <template>
