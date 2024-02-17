@@ -4,10 +4,13 @@ const router = useRouter();
 
 function getUser() {
   document.cookie = ``;
-  //alert(document.cookie);
-  if(document.cookie != ""){
-    var str = document.cookie
-    user = str.slice(9);
+  const cookiesArray = document.cookie.split('; ');
+
+  for (let cookie of cookiesArray) {
+    var [cookieName, cookieValue] = cookie.split('=');
+    if (cookieName === 'username') {
+      user = cookieValue
+    }
   }
 }
 

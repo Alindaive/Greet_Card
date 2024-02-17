@@ -11,8 +11,19 @@ const router = useRouter();
 
 function getCookie() {
   document.cookie = ``;
+  var checkcookie = "";
+  const cookiesArray = document.cookie.split('; ');
+
+  for (let cookie of cookiesArray) {
+    var [cookieName, cookieValue] = cookie.split('=');
+    if (cookieName === 'username') {
+      alert('Hi! '+ cookieValue);
+      checkcookie = cookieValue
+    }
+  }
+
   //alert(document.cookie);
-  if(document.cookie == ""){
+  if(checkcookie == ""){
     alert('Please Login First');
     router.push('/login');
   }

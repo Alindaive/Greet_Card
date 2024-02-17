@@ -132,7 +132,7 @@ function setCookie(name: String, value : String, days :number) {
   }
   document.cookie = `${name}=${value || ''}${expires}; path=/`;
 
-  alert(document.cookie);
+  //alert(document.cookie);
 }
 
 definePageMeta({ layout: 'blank' })
