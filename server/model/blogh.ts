@@ -32,3 +32,16 @@ export const readhistoryfil = async (EMAIL: string) => {
 
   return result as historyModel[];
 };
+
+export const readhistorysearch = async (EMAIL: string) => {
+  var split_t  = EMAIL.split('&');
+  var STU_ID = split_t[0] + '%';
+  var EMAIL = split_t[1] + '%';
+  console.log(STU_ID+'@'+EMAIL);
+  const result = await sql({
+    query: "SELECT * FROM history WHERE STU_ID LIKE ? OR EMAIL LIKE ?",
+    values: [STU_ID,EMAIL]
+  });
+
+  return result as historyModel[];
+};

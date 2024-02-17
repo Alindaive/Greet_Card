@@ -28,6 +28,15 @@ const fetchData = async (GRADE:string,ROOM:string,ACTION: string) => {
   }
 };
 
+const SearchData = async (STU_ID:string,EMAIL:string) => {
+  try {
+    const result = await $fetch('/api/history_dash/search/' + STU_ID+"&"+EMAIL);
+    data.value = result.data as historyModel[];
+  } catch {
+    alert('Search error');
+  }
+};
+
 const userData = [
   {
     stu_id: 65309010001,
@@ -177,8 +186,9 @@ const resolveUserstatusVariant = (status: string) => {
 }
 const search = '';
 
-const his = reactive({
-  search: '',
+const his_search = reactive({
+  STU_ID: '',
+  EMAIL:'',
 });
 
 const his_cal = reactive({
@@ -201,15 +211,19 @@ await fetchData(his_cal.GRADE,his_cal.ROOM,his_cal.ACTION);
 
 <template>
   <VCard>
-    <VROW>
-      <VCol cols="6">
-      <VTextField
-                v-model="search"
-                label="Student ID :"
-                type="text"
-              />
-    </VCol></VROW>
     <VRow><p> </p></VRow>
+    <VRow>&nbsp&nbsp&nbsp&nbsp
+  <VCol cols="5">
+    <VTextField v-model="his_search.STU_ID" label="Student ID:" type="text"/>
+  </VCol>
+  <VCol cols="5">
+    <VTextField v-model="his_search.EMAIL" label="Email:" type="text"/>
+  </VCol>
+  <VCol cols="1">
+      <VBtn @click="() => SearchData(his_search.STU_ID,his_search.EMAIL)">Search</VBtn>
+    </VCol>
+</VRow>
+      
       <VRow>
       <VCol cols="1">
       <v-text sm="6">

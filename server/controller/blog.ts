@@ -41,6 +41,23 @@ export const readhistoryfil = async (evt: H3Event) => {
   }
 };
 
+//เรียกดูข้อมูล history
+export const readhistorysearch = async (evt: H3Event) => {
+  try {
+    console.log('Ctrl  hr ss');
+    const result = await historyModel.readhistorysearch(evt.context.params?.EMAIL as string);
+
+    return {
+      data: result
+    };
+  } catch (err) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Something went wrong'
+    });
+  }
+};
+
 //เรียกดูข้อมูล pending
 export const read = async () => {
   try {

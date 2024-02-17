@@ -7,6 +7,8 @@ const router = createRouter();
 
 router.get('/history_dash', defineEventHandler(blogCtrl.readhistory)); //เรียกดูข้อมูล history
 router.get('/history_dash/filter/:EMAIL', defineEventHandler(blogCtrl.readhistoryfil)); //เรียกดูข้อมูล historyfil
+router.get('/history_dash/search/:EMAIL', defineEventHandler(blogCtrl.readhistorysearch)); //เรียกดูข้อมูล historyfil
+
 
 router.get('/pending_dash', defineEventHandler(blogCtrl.read)); //เรียกดูข้อมูล pending
 router.post('/pending_dash', defineEventHandler(blogCtrl.create)); //สร้างแทรกข้อมูล pending
