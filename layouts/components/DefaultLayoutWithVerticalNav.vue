@@ -17,7 +17,7 @@ function getCookie() {
   for (let cookie of cookiesArray) {
     var [cookieName, cookieValue] = cookie.split('=');
     if (cookieName === 'username') {
-      //alert('Hi! '+ cookieValue);
+      alert('Hi! '+ cookieValue);
       checkcookie = cookieValue
     }
   }
