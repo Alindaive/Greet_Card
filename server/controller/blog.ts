@@ -479,11 +479,6 @@ export const login = async (evt: H3Event) => {
 export const loginc = async (evt: H3Event) => {
   try {
     console.log('Ctrl loginc ss');
-    await useFetch('https://cool-swine-readily.ngrok-free.app/api/card-check-activity/' + evt.context.params?.STU_ID, {
-      headers: {
-        "ngrok-skip-browser-warning": "true",
-      },
-    })
     const result = await memberModel.loginc(evt.context.params?.STU_ID as string);
     var str = JSON.stringify(result[0]);
     var sliced = str.slice(15, -2); 

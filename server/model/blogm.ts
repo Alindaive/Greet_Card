@@ -116,9 +116,9 @@ export const login = async (STU_ID: string) => {
 
 export const loginc = async (STU_ID: string) => {
     try{
-      //console.log('sql login ss');
+      console.log('sql login check');
       const result = (await sql({
-        query: 'SELECT LOGINCHECK FROM member WHERE STU_ID = ?',
+        query: "SELECT LOGINCHECK FROM member WHERE STU_ID = ?",
         values: [STU_ID]
       })) as any;
     
